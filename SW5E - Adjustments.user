@@ -1,0 +1,1822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <thing id="p5CBonusFt" name="Feats, Bonus" description="This adjustment allows you to give bonus feats to your character.  Once you have increased the amount above 1 the &quot;Feats, Bonus&quot; tab will appear allowing you to select your bonus feat." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Feats"/>
+    <eval phase="PreLevel" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+
+      ~ Increase or decrease the Max Feat One field on the new
+      ~ Configurable "cfg5CFeatB".
+      hero.childfound[cfg5CFeatB].field[cfgMaxF1].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CRaceFt" name="Feats, Race" description="This adjustment allows you to give bonus feats to your character that will appear on the Race tab." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <eval phase="PreLevel" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+     
+      ~ Increase or decrease the Max Race Feat value
+      #resmax[resFeatRac] += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CWepDT" name="Weapon, Damage Type" description="Select this adjustment to be able to change the type of damage a weapon does. In example change a greatsword slashing damage to cold or bludgeoning damage type." compset="InPlay">
+    <fieldval field="pUsePicks2" value="1"/>
+    <fieldval field="pCandExpr2" value="thingid.dtAcid | thingid.dtBludgeon | thingid.dtCold | thingid.dtFire | thingid.dtForce | thingid.dtLightnin | thingid.dtNecrotic | thingid.dtPiercing | thingid.dtPoison | thingid.dtPsychic | thingid.dtRadiant | thingid.dtSlashing | thingid.dtThunder"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="Adjustment" tag="YourWep"/>
+    <eval phase="PreLevel" priority="11000" index="2"><![CDATA[
+        ~ Set custom expression to "Picks"
+        field[pUsePicks].value = 1
+        ~ Set custom expression to "All Things on Hero"
+        field[pUsePicks2].value = 0]]></eval>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing chosen get out now!
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+     
+      perform field[pChosen2].chosen.pulltags[DamTypeOvr.?]
+      perform field[pChosen].chosen.pushtags[DamTypeOvr.?]]]></eval>
+    </thing>
+  <thing id="p5CProfAdd" name="Proficiencies" description="This adjustment allows you to increase or decrease the number of tool/skill proficiencies your character can take." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="SkillProf"/>
+    <eval phase="PostLevel" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+     
+      var NumOfProf as number
+      ~ Increase or decrease the number of proficiencies 
+      NumOfProf = field[pAdjust].value
+      call 5CAddProf]]></eval>
+    </thing>
+  <thing id="p5CEqText" name="Equipment, Notes" description="Select this adjustment to allow for adding text notes (up to 100 characters) to equipment that will display as part of the items description text." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.MyGear &amp; !(Helper.Static|thingid.mNatural)"/>
+    <fieldval field="pSource" value="Notes"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Append the entered text to the gear item
+      field[pChosen].chosen.field[DescAppend].text &= field[pSource].text]]></eval>
+    </thing>
+  <thing id="p5CwElemen" name="Weapon Elemental Dmg, Custom" description="Select this adjustment to add custom text damage next to your weapon name. &quot;(Duration)&quot; is the type of damage (ie +1d6 Fire) and &quot;(Source)&quot; is the name of the ability giving this to you (ie Flaming).\n\n{B}Note:{/b} This adjustment will NOT work correctly from the &quot;{b}Personal{/b}&quot; tab as you have to be able to type into the duration field to set the custom text." compset="InPlay">
+    <fieldval field="pDuration" value="+1d6 Elemental"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="Adjustment" tag="YourWep"/>
+    <eval phase="Final" priority="20500"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Here we are pulling the text the user entered from the 
+      ~ Durattion field to set the text.
+      #extradamage[field[pChosen].chosen,field[pDuration].text,field[name].text]]]></eval>
+    </thing>
+  <thing id="p5CwCustom" name="Custom Text: Weapon" description="Append text to the name of your weapon using the (Source) or (Duration) field. Use this to add any other related info you would like to see with when you print a character or use on the iPad. Use this to add info about Rapid Shot, Vital Strike or any other combat related info you would like to see with your weapon." compset="InPlay">
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Adjustment" tag="YourWep"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="AdjShadow" tag="Text"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CArCusto" name="Custom Text: Armor" description="Append text to the name of your armor using the (Source) or (Duration) field. Use this to add any other related info you would like to see with when you print a character or use on the iPad." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjustment" tag="YourArmor"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="AdjShadow" tag="Text"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CEqCusto" name="Custom Text: Equipment" description="Append text to the name of your equipment using the (Source) or (Duration) field. Use this to add any other related info you would like to see with when you print a character or use on the iPad." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjustment" tag="YourGear"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="AdjShadow" tag="Text"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CSpCusto" name="Custom Text: Spell" description="Append text to the name of your spell using the (Source) or (Duration) field. Use this to add any other related info you would like to see with when you print a character or use on the iPad." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseSpell"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="AdjShadow" tag="Text"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <eval phase="Render" priority="99999999" index="2"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CRaCusto" name="Custom Text: Race" description="Append text to the name of your race using the (Source) or (Duration) field. Use this to add any other related info you would like to see with when you print a character or use on the iPad." compset="InPlay">
+    <comment>This must run at Render/999 to work.</comment>
+    <fieldval field="pCandExpr" value="component.BaseRace"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="AdjShadow" tag="Text"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <eval phase="Render" priority="999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CEqChang" name="Custom Name: Equipment" description="Overwrite the name of your equipment using the (Source) or (Duration) field. Use this to force an item to have a new name or custom name that will display on a printed character sheet or iPad." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjustment" tag="YourGear"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CSpChang" name="Custom Name: Spell" description="Overwrite the name of your spell using the (Source) or (Duration) field. Use this to force a spell to have a new name or custom name that will display on a printed character sheet or iPad." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseSpell"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <eval phase="Render" priority="99999999" index="2"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CwChange" name="Custom Name: Weapon" description="Overwrite the name of your weapon using the (Source) or (Duration) field. Use this to force a weapon to have a new name or custom name that will display on a printed character sheet or iPad." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Adjustment" tag="YourWep"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CRaChang" name="Custom Name: Race" description="Overwrite the name of your race using the (Source) or (Duration) field. Use this to force your race to have a new name or custom name that will display on a printed character sheet or iPad." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseRace"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <eval phase="First" priority="600"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      ~ Based on the AdjShadow.? tag on this adjustment we will 
+      ~ either append or overwrite. We now use either Source or 
+      ~ Duration. This allows the adjustment to be used on the
+      ~ Personal tab also.
+      call S2SetName]]></eval>
+    </thing>
+  <thing id="p5CPalAuHa" name="Paladin: Aura of Hate" description="Starting at 7th level, the paladin, as well any fiends and undead within 10 feet of the paladin, gains a bonus to melee weapon damage rolls equal to the paladin&apos;s Charisma modifier (minimum of +1). A creature can benefit from this feature from only one paladin at a time. \n\n18th level, the range of this aura increases to 30 feet." compset="InPlay">
+    <fieldval field="pMinimum" value="1"/>
+    <usesource source="5eDMGCP"/>
+    <tag group="OthAdjCat" tag="Class"/>
+    <eval phase="PostAttr" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+
+      ~ Increase melee damage bonus
+      hero.childfound[Damage].field[dmmBonus].value += field[pAdjust].value]]></eval>
+    <exprreq message="Undead or Fiend creature type required."><![CDATA[#hastype[tpUndead] + #hastype[tpFiend] <> 0]]></exprreq>
+    </thing>
+  <thing id="p5CwFiness" name="Weapon Finesse" description="Select this adjustment to make the selected weapon be treated as if it had the finesse weapon property." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="Adjustment" tag="YourWep"/>
+    <tag group="wProperty" tag="Finesse"/>
+    <eval phase="PreLevel" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Push all the property tags setup on this adjustment
+      ~ to the selected weapon.
+      perform field[pChosen].chosen.pushtags[wProperty.?]]]></eval>
+    </thing>
+  <thing id="p5CClsSpAt" name="Casting Attribute" description="This adjustment allows you to change the spellcasting attribute that the selected class uses (ie make a cleric use Charisma instead of Wisdom)." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Class"/>
+    <tag group="Adjustment" tag="Class"/>
+    <tag group="Adjust2nd" tag="Attribute"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="First" priority="10000"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      var searchexpr as string
+
+      ~ Get the spell attribute tag
+      perform field[pChosen2].chosen.pulltags[SplAttr.?]
+
+      ~ Create the search expression
+      searchexpr = tagids[SplAttr.?]
+
+      ~ Reset the linkages to the chosen attribute
+      perform field[pChosen].chosen.setlinkage[castattr,BaseAttr,searchexpr]
+      perform field[pChosen].chosen.setlinkage[spellattr,BaseAttr,searchexpr]]]></eval>
+    </thing>
+  <thing id="p5CAdd1Sp" name="Add Single Spell to Class/Race" description="Use this adjustment to add a single spell from any class to any class/race on your character.  In example you could add the Hold Person spell to the Paladin spell list or to the Death Knight." compset="InPlay">
+    <fieldval field="pCandExpr2" value="component.BaseSpell"/>
+    <fieldval field="pCandExpr" value="component.Class|component.BaseRace"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="ChooseSrc2" tag="Thing"/>
+    <tag group="Adjust2nd" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      ~ Pull from the spell and push to the Class
+      perform field[pChosen2].chosen.pulltags[ClsAllowSp.?]
+      perform field[pChosen].chosen.pushtags[ClsAllowSp.?]]]></eval>
+    </thing>
+  <thing id="p5CTargTxt" name="Natural Weapon, Target" description="Use this adjustment to override or append target text on a creatures natural attack. After adding select the natural attack, the text action of Append or Override and then type your text into the (Source) or (Duration) fields." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseNatWep"/>
+    <fieldval field="pCandExpr2" value="component.SelectHelp &amp; Selection.5CTextAct"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjust2nd" tag="S2Custom"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <eval phase="Final" priority="999999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      ~ 1 = Source
+      ~ 2 = Duration
+      var S2Type as number
+
+      ~ Figure out if we are to use Duration or Source text
+      Call S2SeleText
+      
+      ~ Use "Source" text
+      if (S2Type = 1) then
+
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wTarget].text = field[pSource].text
+        else
+          field[pChosen].chosen.field[wTarget].text &= field[pSource].text
+        endif
+      
+      ~..Use "Duration" text
+      elseif (S2Type = 2) then
+      
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wTarget].text = field[pDuration].text
+        else
+          field[pChosen].chosen.field[wTarget].text = field[pDuration].text
+        endif
+      endif]]></eval>
+    </thing>
+  <thing id="p5CMutiTxt" name="Multiattack Text" description="Use this adjustment to override or append target text to a creatures multiattack text. After adding select the text action of Append or Override and then type your text into the (Source) or (Duration) fields." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.SelectHelp &amp; Selection.5CTextAct"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="First" priority="1"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Set our focus to the hero's race &
+      perform hero.findchild[BaseRace].setfocus
+      doneif (state.isfocus = 0)
+
+      ~ 1 = Source
+      ~ 2 = Duration
+      var S2Type as number
+
+      ~ Figure out if we are to use Duration or Source text
+      Call S2SeleText
+      
+      ~ Use "Source" text
+      if (S2Type = 1) then
+
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          focus.field[rMultiatt].text = field[pSource].text
+        else
+          focus.field[rMultiatt].text &= field[pSource].text
+        endif
+      
+      ~..Use "Duration" text
+      elseif (S2Type = 2) then
+      
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          focus.field[rMultiatt].text = field[pDuration].text
+        else
+          focus.field[rMultiatt].text = field[pDuration].text
+        endif
+      endif]]></eval>
+    </thing>
+  <thing id="p5CSplAtDm" name="Spell Attack Dmg" description="Use this adjustment to change the name and damage of the selected &quot;Spell Attack&quot; weapon.  After adding this adjustment select the &quot;Spell Attack&quot; weapon from the dropdown and set the spell name and damage dice." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep &amp; thingid.w5CSpellAt"/>
+    <fieldval field="pSource" value="Spell Name"/>
+    <fieldval field="pDuration" value="1d4+1"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      field[pChosen].chosen.field[livename].text = field[pSource].text
+      field[pChosen].chosen.field[sbName].text = field[pSource].text]]></eval>
+    <eval phase="Final" index="2"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen <> 1)
+
+      field[pChosen].chosen.field[wFixDamage].text = field[pDuration].text
+      field[pChosen].chosen.field[wFixRanDam].text = field[pDuration].text]]></eval>
+    </thing>
+  <thing id="p5CSchMaDC" name="Spell DC, Specific School" description="This adjustment allows you to add a bonus/penalty to all your spell DCs of a specific school of magic.\n\n{b}Note:{/b} At this time 5e game system does not show individual spell DCs." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.SplSchool"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Increase/Decrease Spell DC
+      field[pChosen].chosen.field[schDC].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CProfBon" name="Proficiency Bonus" description="This adjustment allows you to increase or decrease your characters Proficiency Bonus value." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Attributes"/>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Increase/Decrease Proficiency Bonus
+      hero.child[ProfBonus].field[tProfBonus].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CSpellDC" name="Spell DC, Single Spell" description="This adjustment allows you to add a bonus/penalty to the DC of a single spell.\n\n{b}Note:{/b} At this time 5e game system does not show individual spell DCs." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseSpell"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ Increase/Decrease Spell DC
+      field[pChosen].chosen.field[sDC].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CRceSize" name="Race, Size Category" description="Select this adjustment to change your size category only. No other changes will be made to your character." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <eval phase="First" priority="20000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Sizemod is the +/- change to apply to the hero's size.
+      var sizemod as number
+
+      Call 5CSizeChg]]>
+      <before name="Resize Same Size Gear"/>
+      </eval>
+    </thing>
+  <thing id="p5CRaceAbi" name="Race, Custom Ability" description="Use this adjustment to add a generic ability to your character. You will be able to set the abilities name and description text up to 100 characters." compset="InPlay">
+    <fieldval field="pSource" value="Name"/>
+    <fieldval field="pDuration" value="Text"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="Race"/>
+    <bootstrap thing="pS2GenAbil"></bootstrap>
+    </thing>
+  <thing id="pS2GenAbil" name="Generic Ability" compset="GenericAb">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="Final" priority="10000"><![CDATA[
+      ~ Note this component set will not be visable in the editor.
+    
+      ~ If we're not bootstrapped to something, get out now!
+      doneif (isroot = 0)
+      ~ If the root is not an adjustment, get out now!
+      doneif (root.tagis[component.BaseAdjust] = 0)
+
+      ~ Set the live name by pulling from the adjustments source
+      field[livename].text = root.field[pSource].text
+      
+      ~ Set the custom description by pulling from the adjustments
+      ~ duration field.
+      field[CustDesc].text = root.field[pDuration].text]]></eval>
+    </thing>
+  <thing id="p5CExtAtt" name="Extra Attunement" description="Adds an extra atunement slot to the hero." compset="InPlay">
+    <fieldval field="pMinimum" value="0"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+
+hero.child[Totals].field[tAttunMax].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CSplKnwn" name="Spells Known" description="Select this adjustment to add to the number of spells known for a spontaneous casting class (ie Sorcerer)." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.Class &amp; CasterType.SpontKnow"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Class"/>
+    <tag group="Adjustment" tag="Class"/>
+    <eval phase="First" priority="10000"><![CDATA[ ~ If we're not enabled, get out now		
+doneif (field[pIsOn].value = 0)		
+~ If nothing chosen, get out now		
+doneif (field[pChosen].ischosen = 0)		
+		
+~ Increase max spells known		
+field[pChosen].chosen.field[cMaxKnSpl].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CSplMem" name="Spells Memorized" description="Select this adjustment to add to the number of spells memorized for spellbook classes (ie Wizard)." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.Class &amp; CasterType.MemBook"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Class"/>
+    <tag group="Adjustment" tag="Class"/>
+    <eval phase="First" priority="10000"><![CDATA[~ If we're not enabled, get out now		
+doneif (field[pIsOn].value = 0)		
+~ If nothing chosen, get out now		
+doneif (field[pChosen].ischosen = 0)		
+		
+~ Increase max spells Memorized		
+field[pChosen].chosen.field[cMaxSpMem].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CBckSkCh" name="Background, Skill Change" description="Use this adjustment to change the Skill Proficience that your background gives. This is useful to customize a background to your specfic character.\n\n{b}Note:{/b} The first dropdown is the list of skills your background provides.  The 2nd dropdown is the new skill you want to replace the skill with." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseSkill &amp; ProfSkill.XXXXX"/>
+    <fieldval field="pCandExpr2" value="component.BaseSkill"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="UserTop5th"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjust2nd" tag="S2Custom"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="ChooseSrc2" tag="Thing"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <eval phase="First" priority="50"><![CDATA[perform hero.findchild[Background].setfocus		
+~ if can't find then get out now!		
+ doneif (state.isfocus = 0)		
+     		
+perform focus.pulltags[ProfSkill.?]		
+		
+if (tagis[ProfSkill.?] <> 0) then		
+     field[pCandExpr].text = "component.BaseSkill & (" & tagids[ProfSkill.?,"|"] & ")"
+endif		
+~ If we're not enabled, get out now		
+doneif (field[pIsOn].value = 0)		
+~ If nothing's been chosen, get out now		
+doneif (field[pChosen].ischosen <> 1)		
+doneif (field[pChosen2].ischosen <> 1)		
+		
+field[abText].text = field[pChosen].chosen.tagids[ProfSkill.?]
+perform focus.deletestr[field[abText].text]		
+
+field[abText2].text = field[pChosen2].chosen.tagids[ProfSkill.?]
+
+perform focus.assignstr[field[abText2].text]]]></eval>
+    </thing>
+  <thing id="p5CBackgro" name="Background" description="Adjustments in this section let you change Background values." compset="InPlay" isshowonly="yes">
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="UserTop5th"/>
+    </thing>
+  <thing id="p5CBckSkAd" name="Background, Skill Add" description="Use this adjustment to add an additional Skill Proficiency to your background. This is useful to customize a background to your specfic character." compset="InPlay">
+    <usesource source="5ePHBCP"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="UserTop5th"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Adjustment" tag="Skill"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <eval phase="First" priority="50"><![CDATA[~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+~ If nothing's been chosen, get out now		
+doneif (field[pChosen].ischosen <> 1)
+
+perform hero.findchild[Background].setfocus		
+~ if can't find then get out now!		
+doneif (state.isfocus = 0)
+~ Assign new skill		
+
+perform field[pChosen].chosen.pulltags[ProfSkill.?]		
+perform focus.pushtags[ProfSkill.?]]]></eval>
+    </thing>
+  <thing id="p5CBckSkRe" name="Background, Skill Remove" description="Use this adjustment to change the Skill Proficience that your background gives. This is useful to customize a background to your specfic character.\n\n{b}Note:{/b} The first dropdown is the list of skills your background provides.  The 2nd dropdown is the new skill you want to replace the skill with." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseSkill &amp; ProfSkill.XXXXX"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="UserTop5th"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="AdjShadow" tag="Name"/>
+    <eval phase="First" priority="50"><![CDATA[perform hero.findchild[Background].setfocus		
+~ if can't find then get out now!		
+doneif (state.isfocus = 0)		
+	
+perform focus.pulltags[ProfSkill.?]
+	
+if (tagis[ProfSkill.?] <> 0) then		
+     field[pCandExpr].text = "component.BaseSkill & (" & tagids[ProfSkill.?,"|"] & ")"
+endif		
+	
+~ If we're not enabled, get out now		
+doneif (field[pIsOn].value = 0)		
+~ If nothing's been chosen, get out now		
+doneif (field[pChosen].ischosen <> 1)		
+  		  
+field[abText].text = field[pChosen].chosen.tagids[ProfSkill.?]
+perform focus.deletestr[field[abText].text]]]></eval>
+    </thing>
+  <thing id="p5CAttr20p" name="Ability Score (Adjust over 20)" description="Select this adjustment to change your Strength, Dexterity, Constitution, Intelligence, Wisdom or Charisma above 20." compset="InPlay">
+    <fieldval field="pWhat" value="(Adjust over 20)"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="Attribute" name="Attributes" abbrev="Attributes"/>
+    <tag group="OthAdjCat" tag="Attributes" name="Attributes" abbrev="Attributes"/>
+    <eval phase="PreAttr" priority="10000"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+~ Add to our chosen attribute
+field[pChosen].chosen.field[aNormMod].value += field[pAdjust].value
+field[pChosen].chosen.field[aMaxValue].value += field[pAdjust].value
+
+~ hard cap at 30
+if (field[pChosen].chosen.field[aMaxValue].value > 30) then
+  field[pChosen].chosen.field[aMaxValue].value = 30
+endif]]></eval>
+    </thing>
+  <thing id="p5CChallen" name="Challenge" description="Select this adjustment to adjust your challenge value." compset="InPlay" replaces="pChallenge">
+    <tag group="OthAdjCat" tag="UserBot5th" name="User 5th Bottom Group" abbrev="User 5th Bottom Group"/>
+    <eval phase="PreLevel" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Add to our CR
+      herofield[tCR].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CHdRmvL" name="Hide/Remove Language" description="This will hide and remove a language already added to the hero." compset="InPlay" replaces="pHideRmLng">
+    <fieldval field="pCandExpr" value="component.BaseLang"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot4th"/>
+    <tag group="ChooseSrc1" tag="Hero" name="All Picks on Hero" abbrev="All Picks on Hero"/>
+    <eval phase="First" priority="10000">doneif (field[pIsOn].value = 0)
+
+       doneif (field[pChosen].ischosen = 0)
+
+       perform field[pChosen].chosen.assign[Hide.Language]</eval>
+    </thing>
+  <thing id="pHd5CLangs" name="Languages" compset="InPlay" uniqueness="unique" isshowonly="yes">
+    <tag group="OthAdjCat" tag="UserBot4th"/>
+    </thing>
+  <thing id="p5CHdLng" name="Prevent Language Selection" description="This will prevent a single chosen language from being added to a character." compset="InPlay" replaces="pHideLang">
+    <fieldval field="pCandExpr" value="component.BaseLang"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot4th"/>
+    <tag group="ChooseSrc1" tag="Thing" name="All Things" abbrev="All Things"/>
+    <eval phase="First" priority="10000">doneif (field[pIsOn].value = 0)
+
+       doneif (field[pChosen].ischosen = 0)
+
+       perform field[pChosen].chosen.pulltags[Language.?,HideLang]
+       perform forward[HideLang.?]</eval>
+    <eval phase="PostLevel" priority="10000" index="2">field[pUsePicks].value = 0</eval>
+    </thing>
+  <thing id="p5CLngRc" name="Languages Known, From Race" description="Select this adjustment to adjust the number of languages you receive from your race." compset="InPlay" replaces="pLangRace">
+    <tag group="OthAdjCat" tag="UserBot4th"/>
+    <eval phase="PreLevel" priority="4000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~add/remove to our languages known
+      hero.child[RaceHelper].field[rLangMax].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CLngBck" name="Languages Known, From Background" description="Select this adjustment to adjust the number of languages you receive from your background." compset="InPlay" replaces="pLangBack">
+    <tag group="OthAdjCat" tag="UserBot4th"/>
+    <eval phase="PreLevel" priority="4000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~add/remove to our languages known
+      #resmax[resLangBck] += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5COthMv" name="Speed, Special" description="Select this adjustment to modify one of the character&apos;s special movement rates, such as flight or swimming." compset="InPlay" replaces="pOthMove">
+    <fieldval field="pMinimum" value="0"/>
+    <tag group="Helper" tag="AdjNoPlus" name="AdjNoPlus" abbrev="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="Attributes"/>
+    <tag group="Adjustment" tag="Movement" name="Movement Type" abbrev="Movement Type"/>
+    <eval phase="First" priority="10000"><![CDATA[
+      ~if nothing's been chosen yet, there's nothing we can do
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Apply the speed
+      field[pChosen].chosen.field[abValue].value = maximum(field[pChosen].chosen.field[abValue].value, field[pAdjust].value)]]></eval>
+    </thing>
+  <thing id="p5CSpeed" name="Speed" description="Select this adjustment to modify a character&apos;s normal movement rate." compset="InPlay" replaces="pSpeed">
+    <tag group="OthAdjCat" tag="Attributes"/>
+    <eval phase="First" priority="1000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Add to speed
+      hero.child[Speed].field[Bonus].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CHP" name="Hit Points" description="Select this adjustment to modify the character&apos;s hit point total." compset="InPlay" replaces="pHP">
+    <tag group="OthAdjCat" tag="Attributes"/>
+    <eval phase="First"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Add to our HP
+      herofield[tHP].value += field[pAdjust].value]]></eval>
+    </thing>
+  <thing id="p5CAnmCmp" name="Animal Companion" description="Add this to add an animal companion to your character." compset="InPlay" replaces="pAnimComp">
+    <tag group="Adjustment" tag="Class" name="Classes" abbrev="Classes"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot6th"/>
+    <eval phase="First" priority="10000">doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+      perform field[pChosen].chosen.assign[CompAvail.AnimComp]</eval>
+    </thing>
+  <thing id="p5CFndFmil" name="Find Familiar" description="Add this to add a familiar to your character." compset="InPlay" replaces="pFindFamil">
+    <tag group="Adjustment" tag="Class" name="Classes" abbrev="Classes"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot6th"/>
+    <eval phase="First" priority="10000">doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+      perform field[pChosen].chosen.assign[CompAvail.Familiar]</eval>
+    </thing>
+  <thing id="pHd5CCmpSm" name="Companions and Summons" compset="InPlay" uniqueness="unique" isshowonly="yes">
+    <tag group="OthAdjCat" tag="UserBot6th"/>
+    </thing>
+  <thing id="p5CSplMgArm" name="Mage Armor" compset="InPlay" uniqueness="unique">
+    <fieldval field="pDuration" value="8 Hours"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="SpInfo" tag="spMageArmo"/>
+    <eval phase="PreAttr"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (hero.tagcount[Hero.EquipArmor] <> 0)
+
+      hero.childfound[ArmorClass].field[tACBase].value = 13]]></eval>
+    </thing>
+  <thing id="pHd5CSpls" name="Specific Spells" compset="InPlay" uniqueness="unique" isshowonly="yes">
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    </thing>
+  <thing id="p5CSplAwkn" name="Awaken" compset="InPlay" uniqueness="unique">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="SpInfo" tag="spAwaken"/>
+    <bootstrap thing="lOther">
+      <containerreq phase="First" priority="100003"><![CDATA[fieldval:pIsOn <> 0]]></containerreq>
+      <assignval field="livename" value="A language of its awakener"/>
+      </bootstrap>
+    <eval phase="PreAttr" priority="1000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      hero.childfound[aINT].field[aOverride].value = 10]]></eval>
+    <prereq message="Requires Huge or smaller">
+      <validate><![CDATA[
+var iSiz as number
+
+iSiz = herofield[tSize].value
+
+if (iSiz > 2) then
+ @valid = 0
+ else
+ @valid = 1
+ endif]]></validate>
+      </prereq>
+    <prereq message="Requires Intelligence of 3 or lower">
+      <validate><![CDATA[
+var iInt as number
+
+iInt = hero.childfound[aINT].field[aFinalVal].value
+
+if (iInt > 3) then
+ @valid = 0
+ else
+ @valid = 1
+ endif]]></validate>
+      </prereq>
+    </thing>
+  <thing id="p5CSplBrkskn" name="Barkskin" compset="InPlay" uniqueness="unique">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="SpInfo" tag="spBarkskin"/>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      hero.childfound[ArmorClass].field[tAC].value = maximum(16,hero.childfound[ArmorClass].field[tAC].value)]]></eval>
+    </thing>
+  <thing id="p5CSplHaste" name="Haste" compset="InPlay" uniqueness="unique">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="SpInfo" tag="spHaste"/>
+    <bootstrap thing="abSplHaste">
+      <containerreq phase="First" priority="500"><![CDATA[fieldval:pIsOn <> 0]]></containerreq>
+      </bootstrap>
+    <eval phase="Final" priority="11000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      hero.childfound[ArmorClass].field[tAC].value += 2
+      hero.childfound[Speed].field[tSpeed].value *= 2
+      #situational[hero.child[svDEX], "Advantage", field[thingname].text]]]></eval>
+    </thing>
+  <thing id="abSplHaste" name="Haste" description="While under the effects of {i}haste{/i}, you gain an additional action once per your turn. This action can be used only to take the Attack (one weapon attack only), Dash, Disengage, Hide, or Use an Object action." compset="Ability">
+    <tag group="Helper" tag="ShowSpec"/>
+    </thing>
+  <thing id="p5CSplAltSlf" name="Alter Self (Natural Weapons)" compset="InPlay" uniqueness="unique">
+    <fieldval field="pCandExpr" value="thingid.dtPiercing | thingid.dtSlashing | thingid.dtBludgeon"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Custom" tag="AltSlfNat" name="Alter Self Natural Attack"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="SpInfo" tag="spAlteSelf"/>
+    <bootstrap thing="wOtherMel">
+      <containerreq phase="First" priority="500"><![CDATA[fieldval:pIsOn <> 0]]></containerreq>
+      <autotag group="Custom" tag="AltSlfNat"/>
+      <autotag group="AttackTarg" tag="1Target"/>
+      <assignval field="wDieSize" value="6"/>
+      <assignval field="wAttack" value="1"/>
+      <assignval field="wDamBonus" value="1"/>
+      <assignval field="wDieCount" value="1"/>
+      <assignval field="livename" value="Natural attack"/>
+      <assignval field="sbName" value="Natural attack"/>
+      </bootstrap>
+    <eval phase="First" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+foreach pick in hero from BaseWep where "Custom.AltSlfNat"
+  var iDam as string
+  iDam = field[pChosen].chosen.tagids[thingid.?,""]
+  iDam = replace(iDam,"thingid","DamTypeOvr",0)
+  perform eachpick.assignstr[iDam]
+  nexteach]]></eval>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+
+foreach pick in hero from BaseWep where "Custom.AltSlfNat"
+  var S2Type as number
+  Call S2SeleText
+  If (S2Type = 1) Then
+    eachpick.field[livename].text = field[pSource].text & " (Alter Self)"
+    eachpick.field[sbName].text = field[pSource].text & " (Alter Self)"
+  ElseIf (S2Type = 2) Then
+    eachpick.field[livename].text = field[pDuration].text & " (Alter Self)"
+    eachpick.field[sbName].text = field[pDuration].text & " (Alter Self)" 
+  Endif
+  nexteach]]></eval>
+    </thing>
+  <thing id="p5CSplDrkvis" name="Darkvision" compset="InPlay" uniqueness="unique">
+    <fieldval field="pDuration" value="8 hours"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="SpInfo" tag="spDarkvisi"/>
+    <bootstrap thing="raDarkVis">
+      <containerreq phase="First" priority="500"><![CDATA[fieldval:pIsOn <> 0]]></containerreq>
+      <autotag group="Value" tag="60"/>
+      </bootstrap>
+    </thing>
+  <thing id="p5CSplEleWep" name="Elemental Weapon" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dtAcid | thingid.dtCold | thingid.dtFire | thingid.dtLightnin | thingid.dtThunder"/>
+    <fieldval field="pMinimum" value="1"/>
+    <fieldval field="pMaximum" value="3"/>
+    <fieldval field="pCandExpr2" value="component.BaseWep &amp; !Helper.EquipMag"/>
+    <fieldval field="pDuration" value="1 hour"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Custom" tag="AltSlfNat" name="Alter Self Natural Attack"/>
+    <tag group="ChooseSrc2" tag="Hero"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="SpInfo" tag="sp5CElemWe"/>
+    <eval phase="First" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+doneif (field[pChosen2].ischosen = 0)
+
+field[pChosen2].chosen.field[wAttBonus].value += field[pAdjust].value
+field[pChosen2].chosen.field[wDamExtra].text &= " +" & field[pAdjust].value & "d4 " & lowercase(field[pChosen].chosen.field[name].text)
+perform field[pChosen2].chosen.assign[Helper.EquipMag]]]></eval>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+doneif (field[pChosen2].ischosen = 0)
+
+field[pChosen2].chosen.field[livename].text &= " (Elemental)"
+field[pChosen2].chosen.field[sbName].text &= " (Elemental)"]]></eval>
+    </thing>
+  <thing id="p5CSplHlyWep" name="Holy Weapon" compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep"/>
+    <fieldval field="pDuration" value="1 hour"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Custom" tag="AltSlfNat" name="Alter Self Natural Attack"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="SpInfo" tag="sp5CXGEHoW"/>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[livename].text &= " (Holy)"
+field[pChosen].chosen.field[sbName].text &= " (Holy)"]]></eval>
+    <eval phase="First" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[wDamExtra].text &= " +2d8 radiant"
+perform field[pChosen].chosen.assign[Helper.EquipMag]]]></eval>
+    </thing>
+  <thing id="p5cSplMgcWep" name="Magic Weapon" compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep &amp; !Helper.EquipMag"/>
+    <fieldval field="pMinimum" value="1"/>
+    <fieldval field="pMaximum" value="3"/>
+    <fieldval field="pDuration" value="1 hour"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Custom" tag="AltSlfNat" name="Alter Self Natural Attack"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="SpInfo" tag="spMagiWeap"/>
+    <eval phase="First" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[wAttBonus].value += field[pAdjust].value
+field[pChosen].chosen.field[wDamBonus].value += field[pAdjust].value
+perform field[pChosen].chosen.assign[Helper.EquipMag]]]></eval>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[livename].text &= " (+"&field[pAdjust].value&")"
+field[pChosen].chosen.field[sbName].text &= " (+"&field[pAdjust].value&")"]]></eval>
+    </thing>
+  <thing id="p5CSplShllgh" name="Shillelagh" description="Select the weapon and your spellcasting ability to apply this." compset="InPlay" uniqueness="unique">
+    <fieldval field="pCandExpr" value="thingid.wClub | thingid.wQtrstaff"/>
+    <fieldval field="pDuration" value="1 minute"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjust2nd" tag="Attribute"/>
+    <tag group="ChooseSrc2" tag="Hero"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="SpInfo" tag="spShillela"/>
+    <eval phase="PostAttr" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen2].ischosen = 0)
+doneif (field[pChosen].ischosen = 0)
+
+var iAtr as string
+
+iAtr = field[pChosen2].chosen.tagids[SplAttr.?,""]
+
+iAtr = replace(iAtr,"SplAttr","DamageOpt",0)
+  perform field[pChosen].chosen.assignstr[iAtr]
+
+iAtr = replace(iAtr,"DamageOpt","MelAttOpt",0)
+  perform field[pChosen].chosen.assignstr[iAtr]
+
+field[pChosen].chosen.field[wDieSize].value = 8
+field[pChosen].chosen.field[wDSizVers].value = 8]]></eval>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+doneif (field[pChosen2].ischosen = 0)
+
+
+field[pChosen].chosen.field[livename].text &= " (Shillelagh)"
+field[pChosen].chosen.field[sbName].text &= " (Shillelagh)"]]></eval>
+    </thing>
+  <thing id="w5CSplMgcStn" name="Magic Stone (Thrown)" compset="Weapon">
+    <fieldval field="wDieCount" value="1"/>
+    <fieldval field="wDieSize" value="6"/>
+    <fieldval field="wRangeNorm" value="60"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="wProfReq" tag="Special"/>
+    <tag group="wProperty" tag="Thrown" name="Thrown" abbrev="Thrown"/>
+    <tag group="DamageType" tag="dtBludgeon"/>
+    <tag group="Helper" tag="Helper"/>
+    <tag group="Helper" tag="NoSelect"/>
+    <tag group="wCategory" tag="RangeThrow" name="Thrown Weapon" abbrev="Thrown"/>
+    <tag group="Helper" tag="Proficient"/>
+    </thing>
+  <thing id="p5CSplMgcStn" name="Magic Stone" description="Select the your spellcasting ability and the number of stones. You can also select a sling to apply this bonus to that weapon when using one of the stones." compset="InPlay" uniqueness="unique">
+    <fieldval field="pCandExpr" value="thingid.wSling | thingid.w5CSplMgcStn"/>
+    <fieldval field="pDuration" value="1 minute"/>
+    <fieldval field="pMinimum" value="0"/>
+    <fieldval field="pMaximum" value="3"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjust2nd" tag="Attribute"/>
+    <tag group="ChooseSrc2" tag="Hero"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="SpInfo" tag="sp5CXGEMaS"/>
+    <bootstrap thing="w5CSplMgcStn">
+      <containerreq phase="First" priority="450"><![CDATA[fieldval:pIsOn <> 0 & fieldval:pAdjust >= 2]]></containerreq>
+      </bootstrap>
+    <bootstrap thing="w5CSplMgcStn">
+      <containerreq phase="First" priority="450"><![CDATA[fieldval:pIsOn <> 0 & fieldval:pAdjust >= 3]]></containerreq>
+      </bootstrap>
+    <bootstrap thing="w5CSplMgcStn">
+      <containerreq phase="First" priority="450"><![CDATA[fieldval:pIsOn <> 0 & fieldval:pAdjust >= 1]]></containerreq>
+      </bootstrap>
+    <eval phase="Render" priority="99999999"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].chosen.tagis[thingid.wSling] = 0)
+doneif (field[pChosen2].ischosen = 0)
+
+
+field[pChosen].chosen.field[livename].text &= " (Magic Stone)"
+field[pChosen].chosen.field[sbName].text &= " (Magic Stone)"]]></eval>
+    <eval phase="PostAttr" priority="600" index="3"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen2].ischosen = 0)
+doneif (field[pAdjust].value = 0)
+
+var iAtr as string
+var iDam as string
+var iAtk as string
+
+iAtr = field[pChosen2].chosen.tagids[SplAttr.?,""]
+iDam = replace(iAtr,"SplAttr","DamageOver",0)
+iAtk = replace(iAtr,"SplAttr","RanAttOver",0)
+
+foreach pick in hero where "thingid.w5CSplMgcStn"
+  perform eachpick.assignstr[iDam]
+  perform eachpick.assignstr[iAtk]
+  nexteach]]></eval>
+    <eval phase="PostAttr" priority="600" index="2"><![CDATA[
+~ If we're not enabled, get out now
+doneif (field[pIsOn].value = 0)
+doneif (field[pChosen2].ischosen = 0)
+doneif (field[pChosen].chosen.tagis[thingid.wSling] = 0)
+
+var iAtr as string
+
+iAtr = field[pChosen2].chosen.tagids[SplAttr.?,""]
+
+iAtr = replace(iAtr,"SplAttr","DamageOver",0)
+  perform field[pChosen].chosen.assignstr[iAtr]
+
+iAtr = replace(iAtr,"DamageOver","RanAttOver",0)
+  perform field[pChosen].chosen.assignstr[iAtr]
+
+field[pChosen].chosen.field[wDieSize].value = 6]]></eval>
+    </thing>
+  <thing id="p5CSplEnlRed" name="Enlarge/Reduce" description="Choose the appropriate number on the incremeter to select which effect of the spell is active:\n1 - Enlarge with size increase\n2 - Enlarge without size increase (not enough room)\n3 - Reduce" compset="InPlay" uniqueness="unique">
+    <fieldval field="pMinimum" value="1"/>
+    <fieldval field="pMaximum" value="3"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="SpInfo" tag="spEnlargeR"/>
+    <eval phase="First" priority="20000"><![CDATA[
+     doneif (field[pIsOn].value = 0)
+
+     if (field[pAdjust].value = 1) then
+       herofield[tSize].value += 1
+       foreach pick in hero from BaseWep
+         eachpick.field[wDamExtra].text &= " + 1d4"
+         nexteach
+     elseif (field[pAdjust].value = 2) then
+       foreach pick in hero from BaseWep
+         eachpick.field[wDamExtra].text &= " + 1d4"
+         nexteach
+     elseif (field[pAdjust].value = 3) then
+       herofield[tSize].value -= 1
+       foreach pick in hero from BaseWep
+         eachpick.field[wDamExtra].text &= " - 1d4"
+         nexteach
+     endif]]></eval>
+    <eval phase="Final" priority="11000" index="2"><![CDATA[doneif (field[pIsOn].value = 0)
+
+if (field[pAdjust].value = 3) then
+  if (herofield[tSize].value <= -2) then
+   herofield[tReach].value += 5
+   endif
+  #situational[hero.child[svSTR], "Disadvantage", field[thingname].text]
+  #situational[hero.child[skAthletic], "Disadvantage", field[thingname].text]
+else
+  if (field[pAdjust].value = 1) then
+    if (herofield[tSize].value >= 1) then
+      herofield[tReach].value -= 5
+      endif
+    endif
+  #situational[hero.child[svSTR], "Advantage", field[thingname].text]
+  #situational[hero.child[skAthletic], "Advantage", field[thingname].text]
+  endif]]></eval>
+    </thing>
+  <thing id="pHd5CCndDmg" name="Conditions and Damage Types" compset="InPlay" uniqueness="unique" isshowonly="yes">
+    <tag group="OthAdjCat" tag="Condition"/>
+    </thing>
+  <thing id="p5CDmgResC" name="Damage Type Resistance (Combined)" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dcAll | thingid.dcAtkNonMa | thingid.dcBluPiSla | thingid.dcWepNonMa | thingid.dcWepNonSi"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamComRes",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CDmgRes" name="Damage Type Resistance" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dtAcid |  thingid.dtCold | thingid.dtPREnergy | thingid.dtFire | thingid.dtPRForce | thingid.dtPRForce | thingid.dtPRIon | thingid.dtPRKinetic | thingid.dtLightnin | thingid.dtNecrotic |  thingid.dtPoison | thingid.dtPsychic | thingid.dtPRSonic | thingid.dtPRTrue"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamageRes",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CDmgVulC" name="Damage Type Vulnerability (Combined)" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dcAll | thingid.dcAtkNonMa | thingid.dcBluPiSla | thingid.dcWepNonMa | thingid.dcWepNonSi"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamComVuln",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CDmgVul" name="Damage Type Vulnerability" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dtAcid | thingid.dtBludgeon | thingid.dtCold | thingid.dtFire | thingid.dtForce | thingid.dtLightnin | thingid.dtNecrotic | thingid.dtPiercing | thingid.dtPoison | thingid.dtPsychic | thingid.dtRadiant | thingid.dtSlashing | thingid.dtThunder"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamageVuln",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CDmgImmC" name="Damage Type Immunity (Combined)" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dcAll | thingid.dcAtkNonMa | thingid.dcBluPiSla | thingid.dcWepNonMa | thingid.dcWepNonSi"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamComImm",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CDmgImm" name="Damage Type Immunity" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.dtAcid | thingid.dtBludgeon | thingid.dtCold | thingid.dtFire | thingid.dtForce | thingid.dtLightnin | thingid.dtNecrotic | thingid.dtPiercing | thingid.dtPoison | thingid.dtPsychic | thingid.dtRadiant | thingid.dtSlashing | thingid.dtThunder"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","DamageImm",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CCndImm" name="Condition Immunity" compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.pcnBlind | thingid.pcnCharmed | thingid.pcnDeaf | thingid.pcnExhaust | thingid.pcnFright | thingid.pcnGrapple | thingid.pcnIncapa | thingid.pcnParaly | thingid.pcnPetri | thingid.pcnPoison | thingid.pcnProne | thingid.pcnRestr | thingid.pcnStunned | thingid.pcnUnconc"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Condition"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <eval phase="First"><![CDATA[      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pChosen].ischosen = 0)
+
+      var iDam as string
+
+      iDam = field[pChosen].chosen.tagids[thingid.?,""]
+      iDam = replace(iDam,"thingid","CondImm",0)
+      perform hero.assignstr[iDam]]]></eval>
+    </thing>
+  <thing id="p5CSplEnhAbi" name="Enhance Ability" description="Choose the appropriate number on the incremeter to select which effect of the spell is active:\n1 - Bear&apos;s Endurance\n2 - Bull&apos;s Strength\n3 - Cat&apos;s Grace\n4 - Eagle&apos;s Splendor\n5 - Fox&apos;s Cunning\n6 - Owl&apos;s Wisdom" compset="InPlay">
+    <fieldval field="pMinimum" value="1"/>
+    <fieldval field="pMaximum" value="6"/>
+    <fieldval field="pDuration" value="1 hour"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="SpInfo" tag="spEnhaAbil"/>
+    <bootstrap thing="PoolWlkBls">
+      <containerreq phase="First" priority="450"><![CDATA[fieldval:pIsOn <> 0 & fieldval:pAdjust = 1]]></containerreq>
+      <autotag group="Value" tag="14"/>
+      <assignval field="livename" value="Bear&apos;s Endurance (2d6)"/>
+      </bootstrap>
+    <bootstrap thing="ab5CSplEnCtG">
+      <containerreq phase="First" priority="500"><![CDATA[fieldval:pIsOn <> 0 & fieldval:pAdjust = 3]]></containerreq>
+      </bootstrap>
+    <eval phase="Final" priority="500" index="2"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      doneif (field[pAdjust].value <> 1)
+
+~Use this to add the result to the pool
+hero.findchild[TempHpPool,"Value.14"].field[thpMinAllw].value = 2
+hero.findchild[TempHpPool,"Value.14"].field[thpMaxAllw].value = 12]]></eval>
+    <eval phase="PostAttr" priority="20000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      if (field[pAdjust].value = 1) then
+        perform hero.childfound[aCON].pulltags[SkillAbil.?]
+      elseif (field[pAdjust].value = 2) then
+        perform hero.childfound[aSTR].pulltags[SkillAbil.?]
+        herofield[tEncumLgt].value = herofield[tEncumLgt].value * 2
+        herofield[tEncumHvy].value = herofield[tEncumHvy].value * 2
+        herofield[tEncumMax].value = herofield[tEncumMax].value * 2
+      elseif (field[pAdjust].value = 3) then
+        perform hero.childfound[aDEX].pulltags[SkillAbil.?]
+      elseif (field[pAdjust].value = 4) then
+        perform hero.childfound[aCHA].pulltags[SkillAbil.?]
+      elseif (field[pAdjust].value = 5) then
+        perform hero.childfound[aINT].pulltags[SkillAbil.?]
+      elseif (field[pAdjust].value = 6) then
+        perform hero.childfound[aWIS].pulltags[SkillAbil.?]
+      endif
+
+      foreach pick in hero from BaseSkill
+        if (eachpick.intersect[SkillAbil,SkillAbil] <> 0) then
+          #situational[eachpick, "Advantage", field[thingname].text]
+          endif
+        nexteach
+
+
+      foreach pick in hero from BaseAttr
+        if (eachpick.intersect[SkillAbil,SkillAbil] <> 0) then
+          #situational[eachpick, "Advantage on all checks with this ability", field[thingname].text]
+          endif
+        nexteach]]></eval>
+    </thing>
+  <thing id="ab5CSplEnCtG" name="Enhance Ability: Cat&apos;s Grace" description="If you&apos;re not incapacitated, you don&apos;t take damage when falling 20 feet or less." compset="Ability">
+    <tag group="Helper" tag="ShowSpec"/>
+    </thing>
+  <thing id="ab5CSplSlow" name="Slow" compset="Ability">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="SpInfo" tag="spSlow"/>
+    </thing>
+  <thing id="p5CSplSlow" name="Slow" compset="InPlay" uniqueness="unique">
+    <usesource source="5ePHBCP"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="OthAdjCat" tag="UserBot3rd"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="SpInfo" tag="spSlow"/>
+    <bootstrap thing="ab5CSplSlow">
+      <containerreq phase="First" priority="500"><![CDATA[fieldval:pIsOn <> 0]]></containerreq>
+      </bootstrap>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      hero.childfound[ArmorClass].field[tAC].value -= 2
+      hero.childfound[svDEX].field[svTotal].value -= 2]]></eval>
+    </thing>
+  <thing id="p5CVision" name="Senses, Special" description="Select this adjustment to add a special vision type to the character, such as darkvision or truesight. If you select blindsight, a second drop down will open to select whether or not you are blind beyond that radius." compset="InPlay">
+    <fieldval field="pMinimum" value="1"/>
+    <fieldval field="pCandExpr" value="thingid.raBlindSi | thingid.raDarkVis | thingid.xTremorsen | thingid.raTruesigh"/>
+    <tag group="OthAdjCat" tag="Attributes"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="ChooseSrc2" tag="Thing"/>
+    <bootstrap thing="xTremorsen">
+      <containerreq phase="First" priority="100">fieldval:pMaximum = 996</containerreq>
+      <autotag group="Value" tag="1"/>
+      </bootstrap>
+    <bootstrap thing="raTruesigh">
+      <containerreq phase="First" priority="100">fieldval:pMaximum = 995</containerreq>
+      <autotag group="Value" tag="1"/>
+      </bootstrap>
+    <bootstrap thing="raBlindSi">
+      <containerreq phase="First" priority="100">fieldval:pMaximum = 998</containerreq>
+      <autotag group="Value" tag="1"/>
+      </bootstrap>
+    <bootstrap thing="raDarkVis">
+      <containerreq phase="First" priority="100">fieldval:pMaximum = 997</containerreq>
+      <autotag group="Value" tag="1"/>
+      </bootstrap>
+    <eval phase="First" priority="101" index="2"><![CDATA[
+      ~if nothing's been chosen yet, there's nothing we can do
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      var tID as string
+      var iVal as string
+      var cVal as string
+
+      tID = field[pChosen].chosen.idstring
+      iVal = "Value." & field[pAdjust].value
+
+      if (compare(tID,"raBlindSi") = 0) then
+         if (hero.childfound[raBlindSi].tagvalue[Value.?] < field[pAdjust].value) then
+            perform hero.childfound[raBlindSi].delete[Value.?]
+            perform hero.childfound[raBlindSi].assignstr[iVal]
+            endif
+      elseif (compare(tID,"raDarkVis") = 0) then
+         if (hero.childfound[raDarkVis].tagvalue[Value.?] < field[pAdjust].value) then
+            perform hero.childfound[raDarkVis].delete[Value.?]
+            perform hero.childfound[raDarkVis].assignstr[iVal]
+            endif
+      elseif (compare(tID,"xTremorsen") = 0) then
+         if (hero.childfound[xTremorsen].tagvalue[Value.?] < field[pAdjust].value) then
+            perform hero.childfound[xTremorsen].delete[Value.?]
+            perform hero.childfound[xTremorsen].assignstr[iVal]
+            endif
+      elseif (compare(tID,"raTruesigh") = 0) then
+         if (hero.childfound[raTruesigh].tagvalue[Value.?] < field[pAdjust].value) then
+            perform hero.childfound[raTruesigh].delete[Value.?]
+            perform hero.childfound[raTruesigh].assignstr[iVal]
+            endif
+      endif
+
+      if (compare(field[pChosen2].chosen.idstring,"5CBlndBeyo") = 0) then
+         perform hero.childfound[raBlindSi].assign[AbilModify.BlindBeyo]
+         endif]]></eval>
+    <eval phase="First" priority="50"><![CDATA[
+      ~if nothing's been chosen yet, there's nothing we can do
+      doneif (field[pChosen].ischosen = 0)
+
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      var tID as string
+      tID = field[pChosen].chosen.idstring
+
+      if (compare(tID,"raBlindSi") = 0) then
+         field[pMaximum].value = 998
+         field[pCandExpr2].text = "thingid.5CNBlndBey | thingid.5CBlndBeyo"
+      elseif (field[pChosen].chosen.tagis[thingid.raDarkVis] <> 0) then
+         field[pMaximum].value = 997
+      elseif (field[pChosen].chosen.tagis[thingid.xTremorsen] <> 0) then
+         field[pMaximum].value = 996
+      elseif (field[pChosen].chosen.tagis[thingid.raTruesigh] <> 0) then
+         field[pMaximum].value = 995
+      endif]]></eval>
+    </thing>
+  <thing id="rSULTstVis" name="Vision Test" compset="Race">
+    <fieldval field="rHitDice" value="16"/>
+    <fieldval field="rHPStart" value="184"/>
+    <fieldval field="rCR" value="10"/>
+    <fieldval field="rMultiatt" value="The froghemoth makes two attacks with its tentacles. It can also use its tongue or bite. "/>
+    <fieldval field="rSTR" value="13"/>
+    <fieldval field="rDEX" value="3"/>
+    <fieldval field="rCON" value="10"/>
+    <fieldval field="rINT" value="-8"/>
+    <fieldval field="rWIS" value="2"/>
+    <fieldval field="rCHA" value="-5"/>
+    <fieldval field="rAC" value="3"/>
+    <tag group="DamageRes" tag="dtLightnin" name="Lightning" abbrev="Lightning"/>
+    <tag group="ProfDouble" tag="skPercep" name="Perception" abbrev="Perception"/>
+    <tag group="ProfSave" tag="svCON" name="Constitution" abbrev="Constitution"/>
+    <tag group="ProfSave" tag="svWIS" name="Wisdom" abbrev="Wisdom"/>
+    <tag group="ProfSkill" tag="skStealth" name="Stealth" abbrev="Stealth"/>
+    <tag group="RaceSize" tag="Huge2" name="Huge" abbrev="Huge"/>
+    <tag group="RaceType" tag="NPC" name="NPC Race" abbrev="NPC Race"/>
+    <tag group="Alignment" tag="Unaligned" name="Unaligned" abbrev="UN"/>
+    <tag group="DamageRes" tag="dtFire" name="Fire" abbrev="Fire"/>
+    <bootstrap thing="tpMonstros"></bootstrap>
+    <bootstrap thing="xTremorsen">
+      <autotag group="Value" tag="7"/>
+      </bootstrap>
+    </thing>
+  <thing id="5CBlndBeyo" name="Blind beyond radius" compset="Simple"></thing>
+  <thing id="5CNBlndBey" name="Not blind beyond radius" compset="Simple"></thing>
+  <thing id="p5CAttrSwp" name="Ability Score (Swap)" description="Select this adjustment to subtract the chosen amount from one score and add it to another. This is useful for Tasha&apos;s variant features. Choose the score to decrement in the first drop-down and the score to increment in the second, and select the number of points to move." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseAttr &amp; !Custom.ASISwp1"/>
+    <fieldval field="pCandExpr2" value="component.BaseAttr &amp; !Custom.ASISwp2"/>
+    <fieldval field="pMaximum" value="5"/>
+    <fieldval field="pMinimum" value="0"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="ChooseSrc2" tag="Hero"/>
+    <tag group="Custom" tag="ASISwp2"/>
+    <tag group="Helper" tag="AdjNoPlus"/>
+    <tag group="OthAdjCat" tag="Attributes" name="Attributes" abbrev="Attributes"/>
+    <tag group="Custom" tag="ASISwp1"/>
+    <eval phase="PreAttr" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+   doneif (field[pIsOn].value = 0)
+   doneif (field[pAdjust].value = 0)
+   doneif (field[pChosen].ischosen = 0)
+   doneif (field[pChosen2].ischosen = 0)
+
+      ~ Subtract from first and add to second
+   field[pChosen].chosen.field[aStartMod].value -= field[pAdjust].value
+   field[pChosen2].chosen.field[aStartMod].value += field[pAdjust].value
+
+      ~ Add tags so they cannot be chosen again
+   perform field[pChosen].chosen.assign[Custom.ASISwp1]
+   perform field[pChosen2].chosen.assign[Custom.ASISwp2]]]></eval>
+    </thing>
+  <thing id="p5CSplSlts" name="Adjust Spell Slots" description="Use this adjustment to change how many slots you have of a particular level. Use the drop-down box to select the level, and adjust the incremeter to the number of total slots that should be added to or subtracted from that slot&apos;s total." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.SlotHolder"/>
+    <fieldval field="pMinimum" value="-10"/>
+    <fieldval field="pMaximum" value="10"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Spell"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <eval phase="First"><![CDATA[if (hero.childlives[cWarlock] <> 0) then 
+   field[pCandExpr].text &= " | thingid.SlotHoldWa"
+  else
+   field[pCandExpr].text &= " & !thingid.SlotHoldWa"
+  endif]]></eval>
+    <eval phase="First" index="2">doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[MaxAllow].value += field[pAdjust].value</eval>
+    </thing>
+  <thing id="p5CDmgTypRep" name="Weapon, Damage Type (Replace)" description="Select this adjustment to be able to change the type of damage a weapon does, replacing the old damge type. In example change a greatsword slashing damage to cold or bludgeoning damage type." compset="InPlay">
+    <fieldval field="pUsePicks2" value="1"/>
+    <fieldval field="pCandExpr2" value="component.DamageType"/>
+    <tag group="Adjustment" tag="YourWep" name="Current Weapons" abbrev="Current Weapons"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <tag group="OthAdjCat" tag="Equipment" name="Equipment" abbrev="Equipment"/>
+    <eval phase="PreLevel" priority="11000" index="2"><![CDATA[
+        ~ Set custom expression to "Picks"
+        field[pUsePicks].value = 1
+        ~ Set custom expression to "All Things on Hero"
+        field[pUsePicks2].value = 0]]></eval>
+    <eval phase="First" priority="10001"><![CDATA[
+      ~ If we're not enabled, get out now & leave
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing chosen get out now!
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+     
+      perform field[pChosen2].chosen.pulltags[DamTypeOvr.?]
+      perform field[pChosen].chosen.delete[DamTypeOvr.?]
+      perform field[pChosen].chosen.pushtags[DamTypeOvr.?]]]></eval>
+    </thing>
+  <thing id="p5COvrCrtTyp" name="Creature Type, Overwrite" description="and the conditional bootstraps for each type\n\nUse this adjustment to add a new creature type to the creature. The original type cannot be removed (this is a Hero Lab limitation), but the new type will supercede it on the stat block." compset="InPlay">
+    <fieldval field="pCandExpr" value="thingid.tpAberr | thingid.tpBeast | thingid.tpCelestia | thingid.tpConst | thingid.tpDragon | thingid.tpElementa | thingid.tpFey | thingid.tpFiend | thingid.tpGiant | thingid.tpHumanoid | thingid.tpMonstros | thingid.tpOoze | thingid.tpPlant | thingid.tpUndead"/>
+    <usesource source="5eDMGCP"/>
+    <usesource source="5eMMCP"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="UserBot5th"/>
+    <tag group="ChooseSrc1" tag="Thing"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <bootstrap thing="tpAberr">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 1</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpBeast">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 2</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpCelestia">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 3</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpConst">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 4</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpDragon">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 5</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpElementa">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 6</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpFey">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 7</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpFiend">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 8</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpGiant">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 9</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpHumanoid">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 10</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpMonstros">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 11</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpOoze">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 12</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpPlant">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 13</containerreq>
+      </bootstrap>
+    <bootstrap thing="tpUndead">
+      <containerreq phase="First" priority="101">fieldval:pMaximum = 14</containerreq>
+      </bootstrap>
+    <eval phase="First"><![CDATA[doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+perform field[pChosen].chosen.pulltags[OverType.?]
+perform hero.pushtags[OverType.?]
+
+if (field[pChosen].chosen.tagis[thingid.tpAberr] <> 0) then
+  field[pMaximum].value = 1
+elseif (field[pChosen].chosen.tagis[thingid.tpBeast] <> 0) then
+  field[pMaximum].value = 2
+elseif (field[pChosen].chosen.tagis[thingid.tpCelestia] <> 0) then
+  field[pMaximum].value = 3
+elseif (field[pChosen].chosen.tagis[thingid.tpConst] <> 0) then
+  field[pMaximum].value = 4
+elseif (field[pChosen].chosen.tagis[thingid.tpDragon] <> 0) then
+  field[pMaximum].value = 5
+elseif (field[pChosen].chosen.tagis[thingid.tpElementa] <> 0) then
+  field[pMaximum].value = 6
+elseif (field[pChosen].chosen.tagis[thingid.tpFey] <> 0) then
+  field[pMaximum].value = 7
+elseif (field[pChosen].chosen.tagis[thingid.tpFiend] <> 0) then
+  field[pMaximum].value = 8
+elseif (field[pChosen].chosen.tagis[thingid.tpGiant] <> 0) then
+  field[pMaximum].value = 9
+elseif (field[pChosen].chosen.tagis[thingid.tpHumanoid] <> 0) then
+  field[pMaximum].value = 10
+elseif (field[pChosen].chosen.tagis[thingid.tpMonstros] <> 0) then
+  field[pMaximum].value = 11
+elseif (field[pChosen].chosen.tagis[thingid.tpOoze] <> 0) then
+  field[pMaximum].value = 12
+elseif (field[pChosen].chosen.tagis[thingid.tpPlant] <> 0) then
+  field[pMaximum].value = 13
+elseif (field[pChosen].chosen.tagis[thingid.tpUndead] <> 0) then
+  field[pMaximum].value = 14
+  endif]]></eval>
+    </thing>
+  <thing id="p5CRacHDSz" name="Racial Hit Die Size" description="Use this adjustment to change how many sides the creature&apos;s race&apos;s Hit Dice have. Select the race from the dropdown, then use the incremeter to increase or decrease the number of sides by that amount." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseRace &amp; (RaceType.NPC | RaceType.CustomMon)"/>
+    <fieldval field="pMinimum" value="-3"/>
+    <fieldval field="pMaximum" value="16"/>
+    <usesource source="5eMMCP"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="OthAdjCat" tag="UserBot5th"/>
+    <eval phase="First" priority="600" index="2">doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[rHDSides].value += field[pAdjust].value</eval>
+    </thing>
+  <thing id="p5CRacHDCt" name="Racial Hit Die Count" description="Use this adjustment to change how many Hit Dice the creature&apos;s race has. Select the race from the dropdown, then use the incremeter to increase or decrease the number of dice by that amount." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseRace &amp; (RaceType.NPC | RaceType.CustomMon)"/>
+    <fieldval field="pMaximum" value="50"/>
+    <fieldval field="pMinimum" value="-50"/>
+    <usesource source="5eMMCP"/>
+    <tag group="OthAdjCat" tag="UserBot5th"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <eval phase="First" priority="1" index="2">doneif (field[pIsOn].value = 0)
+doneif (field[pChosen].ischosen = 0)
+
+field[pChosen].chosen.field[rHitDice].value += field[pAdjust].value</eval>
+    </thing>
+  <thing id="p5CAddMulti" name="Multiattack, Add" description="Use this adjustment to add multiattack to a creature. Type your text into the (Source) field first, then use the (Duration) field if you need more text. Please note; the maximum text for each field is 100 characters." compset="InPlay">
+    <usesource source="5eMMCP"/>
+    <tag group="OthAdjCat" tag="Race" name="Race Modificiations" abbrev="Race Modificiations"/>
+    <tag group="Helper" tag="AdjInfo" name="Adjustment Information" abbrev="Adjustment Information"/>
+    <tag group="Helper" tag="NoIncr" name="NoIncr" abbrev="NoIncr"/>
+    <bootstrap thing="xMultiatt"></bootstrap>
+    <eval phase="First" priority="1"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~ Set our focus to the hero's race &
+      perform hero.findchild[BaseRace].setfocus
+      doneif (state.isfocus = 0)
+
+      focus.field[rMultiatt].text = field[pSource].text
+      hero.childfound[xMultiatt].field[CustDesc].text = field[pSource].text
+      hero.childfound[xMultiatt].field[CustDesc].text &= field[pDuration].text]]></eval>
+    </thing>
+  <thing id="p5CWpAtkEf" name="Weapon, Attack Effect" description="Use this adjustment to append/override the attack text effect on a creature&apos;s weapon. After adding this adjustment, select the weapon, the text action of Append or Overwrite and then type your text into the using the (Source) or (Duration) fields." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep"/>
+    <fieldval field="pCandExpr2" value="component.SelectHelp &amp; Selection.5CTextAct"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjust2nd" tag="S2Custom"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <eval phase="Final" priority="999999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      ~ 1 = Source
+      ~ 2 = Duration
+      var S2Type as number
+
+      ~ Figure out if we are to use Duration or Source text
+      Call S2SeleText
+      
+      ~ Use "Source" text
+      if (S2Type = 1) then
+
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wAttackEff].text = field[pSource].text
+        else
+          field[pChosen].chosen.field[wAttackEff].text &= field[pSource].text
+        endif
+      
+      ~..Use "Duration" text
+      elseif (S2Type = 2) then
+      
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wAttackEff].text = field[pDuration].text
+        else
+          field[pChosen].chosen.field[wAttackEff].text = field[pDuration].text
+        endif
+      endif]]></eval>
+    </thing>
+  <thing id="p5CWpExDmg" name="Weapon, Extra Damage" description="Use this adjustment to add extra damage text to any creature&apos;s weapon. After adding this adjustment, select the weapon, the text action of Append or Override and then type your text into the (Source) or (Duration) fields." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <eval phase="Final" priority="999999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      ~ 1 = Source
+      ~ 2 = Duration
+      var S2Type as number
+
+      ~ Figure out if we are to use Duration or Source text
+      Call S2SeleText
+      
+      ~ Use "Source" text
+      if (S2Type = 1) then
+
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wDamExtra].text = field[pSource].text
+        else
+          field[pChosen].chosen.field[wDamExtra].text &= field[pSource].text
+        endif
+      
+      ~..Use "Duration" text
+      elseif (S2Type = 2) then
+      
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wDamExtra].text = field[pDuration].text
+        else
+          field[pChosen].chosen.field[wDamExtra].text = field[pDuration].text
+        endif
+      endif]]></eval>
+    </thing>
+  <thing id="p5CWpTrgt" name="Weapon, Target" description="Use this adjustment to override or append target text on a creature&apos;s weapon. After adding this adjustment, select the weapon, the text action of Append or Override and then type your text into the (Source) or (Duration) fields." compset="InPlay">
+    <fieldval field="pCandExpr" value="component.BaseWep"/>
+    <fieldval field="pCandExpr2" value="component.SelectHelp &amp; Selection.5CTextAct"/>
+    <usesource source="5ePHBCP"/>
+    <tag group="OthAdjCat" tag="Equipment"/>
+    <tag group="ChooseSrc1" tag="Hero"/>
+    <tag group="Helper" tag="AdjInfo"/>
+    <tag group="Helper" tag="NoIncr"/>
+    <tag group="Adjust2nd" tag="S2Custom"/>
+    <tag group="Adjustment" tag="S2Custom"/>
+    <eval phase="Final" priority="999999999"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+      ~ If nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+      doneif (field[pChosen2].ischosen = 0)
+
+      ~ 1 = Source
+      ~ 2 = Duration
+      var S2Type as number
+
+      ~ Figure out if we are to use Duration or Source text
+      Call S2SeleText
+      
+      ~ Use "Source" text
+      if (S2Type = 1) then
+
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wTarget].text = field[pSource].text
+        else
+          field[pChosen].chosen.field[wTarget].text &= field[pSource].text
+        endif
+      
+      ~..Use "Duration" text
+      elseif (S2Type = 2) then
+      
+        ~ Do we overwrite the text or append the text?
+        if (field[pChosen2].chosen.tagis[5CTextAct.OverWrite] = 1) then
+          field[pChosen].chosen.field[wTarget].text = field[pDuration].text
+        else
+          field[pChosen].chosen.field[wTarget].text = field[pDuration].text
+        endif
+      endif]]></eval>
+    </thing>
+  <thing id="p5CWepMelRng" name="Weapon Reach, Melee" description="Select this adjustment to adjust the melee reach on a weapon." compset="InPlay">
+    <tag group="Adjustment" tag="YourWep" name="Current Weapons" abbrev="Current Weapons"/>
+    <tag group="Helper" tag="AdjInfo" name="Adjustment Information" abbrev="Adjustment Information"/>
+    <tag group="OthAdjCat" tag="AttDam" name="Attack/Damage" abbrev="Attack/Damage"/>
+    <eval phase="PostAttr" priority="10000"><![CDATA[
+      ~ If we're not enabled, get out now
+      doneif (field[pIsOn].value = 0)
+
+      ~if nothing's been chosen, get out now
+      doneif (field[pChosen].ischosen = 0)
+
+      field[pChosen].chosen.field[wReach].value += field[pAdjust].value]]></eval>
+    </thing>
+  </document>

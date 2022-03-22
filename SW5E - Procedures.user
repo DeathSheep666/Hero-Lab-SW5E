@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <loadonce key="COM_5ePack - Procedures"/>
+  <fileinfo>
+    <info_author>Tim Shadow
+      Email: ShadowChemosh@yahoo.com</info_author>
+    <info_history>January 14, 2016
+      -Created new to hold procedures for the new 5e Pack.</info_history>
+    </fileinfo>
+  <procedure id="5CAddProf" context="pick"><![CDATA[
+    ~ This procedure allows for giving a central Tab to add
+    ~ proficiencies for skills, tools, or Skill/Tool combo.
+    ~ This is useful for allowing the Tools to display correctly
+    ~ on the "Skills" tab.
+    
+    ~ Timing: Post-Level/10000
+    ~ Parms In:
+    ~     NumOfProf - Use this for adding additional Skills & Tools
+    ~     NumOfTool - Use this for adding ONLY Tool choices.
+    ~     NumOfSkill - Use this for adding ONLY Skill choices.
+    
+    ~ Example Use for allowing both a Skill/Tool choice
+    ~ var NumOfProf as number
+    ~ NumOfProf = 1
+    ~ call 5CAddProf
+
+    ~ Example Use for allowing only Skill choices
+    ~ var NumOfProf as number
+    ~ NumOfSkill = 1
+    ~ call 5CAddProf
+
+    ~ Example Use for allowing only Tool choices
+    ~ var NumOfProf as number
+    ~ NumOfTool = 1
+    ~ call 5CAddProf
+
+    var NumOfProf as number
+    var NumOfSkill as number
+    var NumOfTool as number
+
+    ~ If a combination of Tools/Skills is allowed add here
+    if (NumOfProf <> 0) then
+      hero.childfound[cfg5CProf].field[cToolMax].value += NumOfProf
+      hero.childfound[cfg5CProf].field[cSkillMax].value += NumOfProf
+    endif
+
+    ~ If only skills are allowed add here
+    if (NumOfSkill <> 0) then
+      hero.childfound[cfg5CProf].field[cSkillMax2].value += NumOfSkill
+    endif
+
+    ~ If only tools are allowed add here
+    if (NumOfTool <> 0) then
+      hero.childfound[cfg5CProf].field[cToolMax2].value += NumOfTool
+    endif]]></procedure>
+  <procedure id="5Cfoctocls" context="pick"><![CDATA[
+    doneif (isroot = 0)
+
+    if (root.tagis[component.Class] <> 0) then
+      perform root.setfocus
+    elseif (root.tagis[component.Configure] <> 0) then
+      perform root.setfocus
+    else
+      if (root.islinkage[table] <> 0) then
+        perform root.linkage[table].setfocus
+      elseif (root.islinkage[varies] <> 0) then
+        perform root.linkage[varies].setfocus
+      endif
+    endif
+
+    doneif (state.isfocus = 0)
+
+    ~ We could also be in a table on a configureable, so stop if that is where
+    ~ we are.
+    doneif (focus.tagis[component.Configure] <> 0)]]></procedure>
+  <procedure id="S2SeleText" context="pick"><![CDATA[
+    ~ For adjustment use only. Select where the text is coming from.
+    ~ Either the Duration field or the Source field.
+
+    ~ 1 = Source
+    ~ 2 = Duration
+    var S2Type as number
+
+    ~ If the default "(duration)" text is changed then attempt to use it.
+    If (compare(field[pDuration].text,"(duration)") <> 0) Then
+      ~ Make sure that we are not blank either.
+      If (compare(field[pDuration].text,"") <> 0) Then
+        S2Type = 2
+      Endif
+    Endif
+
+    ~ If the default "(source)" text is changed then attempt to use it.
+    If (compare(field[pSource].text,"(source)") <> 0) Then
+      ~ Make sure that we are not blank either.
+      If (compare(field[pSource].text,"") <> 0) Then
+        S2Type = 1
+      Endif
+    Endif]]></procedure>
+  <procedure id="S2SetName" context="pick"><![CDATA[
+    ~Set the Custom Name and Custom Text adjustments logic into this single
+    ~procedure. We need to allow for using the Duration field or the Source
+    ~field for setting the name so that we are backwards compatable.
+    ~Timing: Render/99999999
+
+    ~ 1 = Source
+    ~ 2 = Duration
+    var S2Type as number
+
+    ~ Figure out if we are to use Duration or Source text
+    Call S2SeleText
+
+    ~ The tag AdjShadow.Name means we are totally overwriting the live name value
+    If (tagis[AdjShadow.Name] <> 0) Then
+
+      ~ Source field has text to use so use it
+      If (S2Type = 1) Then
+        field[pChosen].chosen.field[livename].text = field[pSource].text
+        field[pChosen].chosen.field[sbName].text = field[pSource].text
+      ~ Duration field has text and Source does not so use it
+      ElseIf (S2Type = 2) Then
+        field[pChosen].chosen.field[livename].text = field[pDuration].text
+        field[pChosen].chosen.field[sbName].text = field[pDuration].text        
+      Endif
+
+    ~ The tag AdjShadow.Text means we are appending to the live name value
+    ElseIf (tagis[AdjShadow.Text] <> 0) Then
+
+      ~ Source field has text to use so use it
+      If (S2Type = 1) Then
+        field[pChosen].chosen.field[livename].text &= field[pSource].text
+        field[pChosen].chosen.field[sbName].text &= field[pSource].text
+      ~ Duration field has text and Source does not so use it
+      ElseIf (S2Type = 2) Then
+        field[pChosen].chosen.field[livename].text &= field[pDuration].text
+        field[pChosen].chosen.field[sbName].text &= field[pDuration].text      
+      Endif
+    Endif]]></procedure>
+  <procedure id="5CSplSchSF" context="pick"><![CDATA[
+    ~ This procedure is for "Spell School - Spell Focus" logic.
+    ~ We are called from every spell school pick to give a 1/2 
+    ~ proficiency bonus to that school of magic.
+    
+    ~ If we do not have spell focus then get out now!
+    doneif (tagis[Broadcast.SpellFocus] = 0)
+
+    ~ We need to apply "half" our proficiency bonus to this
+    ~ school of magic.
+    field[schDC].value += round(hero.child[ProfBonus].field[tProfBonus].value/2,0,-1)]]></procedure>
+  <procedure id="5CSizeChg" context="pick"><![CDATA[
+    ~ This procedure tries to centralize all the logic of changing
+    ~ a characters size for the 5e Community. So far the best timing
+    ~ appears to be First/20000
+
+    ~ Example use:
+    ~ Sizemod is the +/- change to characters's size.
+    ~ var sizemod as number
+    ~ sizemod = 1
+    ~ Call 5CSizeChg
+
+    ~ I have implented the DMG size change rule of dice size changing:
+    ~ Hit Die - Page: 276
+    ~       Tiny: d4
+    ~      Small: d6
+    ~     Medium: d8
+    ~      Large: d10
+    ~       Huge: d12
+    ~ Gargantuan: d20     
+  
+    ~ Sizemod is the +/- change to apply to the hero's size.
+    var sizemod as number
+    var iX as number
+
+    sizemod = field[pAdjust].value
+
+    ~ If no size mode then we are done!
+    doneif (sizemod = 0)
+
+    ~ Add to size - must come after race and template size set
+    herofield[tSize].value += sizemod
+
+    ~ Make sure the user didn't try to adjust size greater than Gargantuan (+3), or
+    ~ smaller than Tiny (-2)
+    herofield[tSize].value = maximum(herofield[tSize].value, -2)
+    herofield[tSize].value = minimum(herofield[tSize].value, 3)
+
+    ~ Set pointer to our base race    
+    perform hero.findchild[BaseRace].setfocus
+    doneif (state.isfocus = 0)
+  
+    ~ Based on the races final size reset the hit dice size
+  
+    ~ Tiny
+    If (herofield[tSize].value = -2) then
+      focus.field[rHDSides].value = 4
+    ~ Small
+    ElseIf (herofield[tSize].value = -1) then
+      focus.field[rHDSides].value = 6
+    ~ Medium
+    ElseIf (herofield[tSize].value = 0) then
+      focus.field[rHDSides].value = 8
+    ~ Large
+    ElseIf (herofield[tSize].value = 1) then
+      focus.field[rHDSides].value = 10
+    ~ Huge
+    ElseIf (herofield[tSize].value = 2) then
+      focus.field[rHDSides].value = 12
+    ~ Gargantuan
+    ElseIf (herofield[tSize].value = 3) then
+      focus.field[rHDSides].value = 20
+    Endif]]></procedure>
+  <procedure id="5CSetSize" context="pick"><![CDATA[
+    ~ This procedure forces a charcter to be a specific size no matter the
+    ~ starting size of the character. In example force the character
+    ~ to always be size large!
+    ~ So far the best timing appears to be First/20000
+
+    ~       Tiny: -2
+    ~      Small: -1
+    ~     Medium:  0
+    ~      Large:  1
+    ~       Huge:  2
+    ~ Gargantuan:  3
+
+    ~ Example use:
+    ~ sizetarget is the new characters size
+    ~ var sizetarget as number
+    ~ sizemod = 3
+    ~ Call 5CSetSize
+
+    ~ sizetarget is our incoming variable - the tSize that the character will be set to
+    var sizetarget as number
+   
+    ~ sizemod is our outgoing variable - the modifier to the existing tSize
+    ~ that's needed in order to get to that target size
+    var sizemod as number
+
+    ~ Make sure the user didn't try to adjust size greater than Gargantuan (+3), or
+    ~ smaller than Tiny (-2)
+    sizetarget = maximum(sizetarget, -2)
+    sizetarget = minimum(sizetarget, 3)
+  
+    ~ Calculate the modifier we need
+    sizemod = sizetarget - herofield[tSize].value
+
+    ~ call the Size Change procedure
+    Call 5CSizeChg]]></procedure>
+  <procedure id="5CSkProfDo" context="pick"><![CDATA[~ procedure to grant proficiency or double if already proficient
+~ Must run at Post-Levels/15500
+~ called by declaring variable and then procedure
+~ var v_SkillID as string
+~ v_SkillID = "skPerform"  
+~ call 5CSkProfDo
+
+  var v_SkillID as string
+
+  ~ Make a Target.? skill id to be used in the find chile
+  v_SkillID = "Target." & v_SkillID
+
+  ~ Set focus to the skill id passed in
+  perform hero.findchild[BaseSkill,v_SkillID].setfocus
+  doneif (state.isfocus = 0)
+  
+  ~ If not proficient then make skill proficient
+  if (focus.tagis[Helper.Proficient] = 0) then 
+    perform focus.assign[Helper.Proficient]
+        
+  ~..Else if already proficient make double proficient
+  elseif (focus.tagis[Helper.Proficient] <> 0) then
+    perform focus.assign[Helper.ProfDouble]
+  endif]]></procedure>
+  <procedure id="5CAddRes" context="pick"><![CDATA[
+    ~ This procedure allows for giving a central Tab to add
+    ~ damage resistances.
+    ~ This is useful for allowing more than two choices
+    
+    ~ Timing: Post-Level/10000
+    ~ Parms In:
+    ~     NumOfRes - Use this for adding additional Resistances
+    
+    ~ Example
+    ~ var NumOfRes as number
+    ~ NumOfRes = 1
+    ~ call 5CAddRes
+
+    var NumOfRes as number
+
+    ~ Increase number of damage resistances
+    if (NumOfRes <> 0) then
+      hero.childfound[cfg5CRes].field[cToolMax].value += NumOfRes
+    endif]]></procedure>
+  </document>

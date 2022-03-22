@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <loadonce key="COM_5ePack - Helper Things"/>
+  <thing id="meh5C" name="5e Community Mechanic" description="This mechanic holds special bootstraps called Configurable&apos;s that allow for adding &quot;new&quot; tabs into Hero Lab.  Note that a Mechanic once made is ALWAYS live on the Hero allow one to bootsrap other Things or run a script always on every character." compset="Mechanics">
+    <bootstrap thing="5CJournal"></bootstrap>
+    <bootstrap thing="cfg5CFeatB"></bootstrap>
+    <bootstrap thing="cfg5CProf"></bootstrap>
+    <bootstrap thing="sel5CEleAc"></bootstrap>
+    <bootstrap thing="sel5CEleCo"></bootstrap>
+    <bootstrap thing="sel5CEleLi"></bootstrap>
+    <bootstrap thing="sel5CEleFi"></bootstrap>
+    <bootstrap thing="sel5CEleTh"></bootstrap>
+    <bootstrap thing="ss5CAbjura"></bootstrap>
+    <bootstrap thing="ss5CConjur"></bootstrap>
+    <bootstrap thing="ss5CDivi"></bootstrap>
+    <bootstrap thing="ss5CEnchan"></bootstrap>
+    <bootstrap thing="ss5CEvocat"></bootstrap>
+    <bootstrap thing="ss5CIllusi"></bootstrap>
+    <bootstrap thing="ss5CNecrom"></bootstrap>
+    <bootstrap thing="ss5CTransm"></bootstrap>
+    <bootstrap thing="ss5CUniver"></bootstrap>
+    <bootstrap thing="ss5CAir"></bootstrap>
+    <bootstrap thing="ss5CEarth"></bootstrap>
+    <bootstrap thing="ss5CFire"></bootstrap>
+    <bootstrap thing="ss5CWater"></bootstrap>
+    <bootstrap thing="ss5CMetal"></bootstrap>
+    <bootstrap thing="ss5CVoid"></bootstrap>
+    <bootstrap thing="ss5CWood"></bootstrap>
+    <bootstrap thing="ss5CElemen"></bootstrap>
+    </thing>
+  <thing id="5CJournal" name="Always Show Journal Tab" description="This simple thing forces the {b}Journal{/b} tab to appear which is useful on NPC&apos;s which has the tab hidden." compset="Simple" uniqueness="useronce">
+    <usesource source="5eJournal"/>
+    <eval phase="PostAttr" priority="10000">~ If not a NPC get out now!
+      doneif (hero.tagis[CharType.typNPC] = 0)
+
+      ~ Prevent the Journal Tab from being hidden for NPCs
+      perform hero.delete[HideTab.journal]
+      perform hero.delete[Hero.NoAdvance]
+      ~perform hero.delete[Hero.ClsErLev?]</eval>
+    <eval phase="PostAttr" priority="50000" index="2">~ If not a NPC get out now!
+      doneif (hero.tagis[CharType.typNPC] = 0)
+
+      perform hero.delete[Hero.ClsErLev?]</eval>
+    </thing>
+  <thing id="sel5CEleAc" name="Acid" description="Base Elemental Type" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="Energy" name="Energy Type (All)"/>
+    <tag group="Selection" tag="EnergyBase" name="Energy Type (Base 4)"/>
+    <tag group="5CElemType" tag="Acid"/>
+    </thing>
+  <thing id="sel5CEleCo" name="Cold" description="Base Elemental Type" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="Energy" name="Energy Type (All)"/>
+    <tag group="Selection" tag="EnergyBase" name="Energy Type (Base 4)"/>
+    <tag group="5CElemType" tag="Cold"/>
+    </thing>
+  <thing id="sel5CEleLi" name="Lightning" description="Base Elemental Type" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="Energy" name="Energy Type (All)"/>
+    <tag group="Selection" tag="EnergyBase" name="Energy Type (Base 4)"/>
+    <tag group="5CElemType" tag="Lightning"/>
+    </thing>
+  <thing id="sel5CEleFi" name="Fire" description="Base Elemental Type" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="Energy" name="Energy Type (All)"/>
+    <tag group="Selection" tag="EnergyBase" name="Energy Type (Base 4)"/>
+    <tag group="5CElemType" tag="Fire"/>
+    </thing>
+  <thing id="sel5CEleTh" name="Thunder" description="Base Elemental Type" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="Energy" name="Energy Type (All)"/>
+    <tag group="5CElemType" tag="Thunder"/>
+    </thing>
+  <thing id="sel5CTxtAp" name="Append" description="Adjustment text action" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CTextAct" name="Text Action"/>
+    <tag group="5CTextAct" tag="Append"/>
+    </thing>
+  <thing id="sel5CTxtOv" name="Override" description="Adjustment text action" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CTextAct" name="Text Action"/>
+    <tag group="5CTextAct" tag="OverWrite"/>
+    </thing>
+  <thing id="sel5CValueBonus0" name="+0" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus" name="Value Bonus"/>
+    <tag group="Value" tag="0"/>
+    </thing>
+  <thing id="sel5CValueBonus1" name="+1" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="1"/>
+    </thing>
+  <thing id="sel5CValueBonus2" name="+2" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="2"/>
+    </thing>
+  <thing id="sel5CValueBonus3" name="+3" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="3"/>
+    </thing>
+  <thing id="sel5CValueBonus4" name="+4" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="4"/>
+    </thing>
+  <thing id="sel5CValueBonus5" name="+5" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="5"/>
+    </thing>
+  <thing id="sel5CValueBonus6" name="+6" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="6"/>
+    </thing>
+  <thing id="sel5CValueBonus7" name="+7" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="7"/>
+    </thing>
+  <thing id="sel5CValueBonus8" name="+8" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="8"/>
+    </thing>
+  <thing id="sel5CValueBonus9" name="+9" description="Value Bonus Helper" compset="SelectHelp" uniqueness="unique">
+    <tag group="Selection" tag="5CValueBonus"/>
+    <tag group="Value" tag="9"/>
+    </thing>
+  <thing id="ss5CAbjura" name="Abjuration" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Abjur"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CConjur" name="Conjuration" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Conjur"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CDivi" name="Divination" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Divination"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CEnchan" name="Enchantment" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Enchant"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CEvocat" name="Evocation" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Evocation"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CIllusi" name="Illusion" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Illusion"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CNecrom" name="Necromancy" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Necromancy"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CTransm" name="Transmutat" compset="SplSchool">
+    <tag group="MagSch5C" tag="CORE"/>
+    <tag group="sSchool" tag="Transmutat"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CUniver" name="Universal" compset="SplSchool">
+    <tag group="sSchool" tag="Universal"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CAir" name="Air" compset="SplSchool">
+    <tag group="MagSch5C" tag="Element"/>
+    <tag group="sSchool" tag="Air"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CEarth" name="Earth" compset="SplSchool">
+    <tag group="MagSch5C" tag="Element"/>
+    <tag group="sSchool" tag="Earth"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CFire" name="Fire" compset="SplSchool">
+    <tag group="MagSch5C" tag="Element"/>
+    <tag group="sSchool" tag="Fire"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CWater" name="Water" compset="SplSchool">
+    <tag group="MagSch5C" tag="Element"/>
+    <tag group="sSchool" tag="Water"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CMetal" name="Metal" compset="SplSchool">
+    <tag group="MagSch5C" tag="ExpElement"/>
+    <tag group="sSchool" tag="Abjur"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CVoid" name="Void" compset="SplSchool">
+    <tag group="MagSch5C" tag="ExpElement"/>
+    <tag group="sSchool" tag="Abjur"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CWood" name="Wood" compset="SplSchool">
+    <tag group="MagSch5C" tag="ExpElement"/>
+    <tag group="sSchool" tag="Wood"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="ss5CElemen" name="Elemental" compset="SplSchool">
+    <tag group="MagSch5C" tag="ExpElement"/>
+    <tag group="sSchool" tag="Elemental"/>
+    <eval phase="PostLevel" priority="20000"><![CDATA[
+      ~ Check for Spell Focus for this specific school &
+      call 5CSplSchSF]]></eval>
+    </thing>
+  <thing id="cfg5CFeatB" name="Feats, Bonus" description="This allows for the new tab &quot;Feats, Bonus&quot; to appear in HL once the field cfgMaxF1 is greater than zero.  In addition this only works because I have bootstrapped this &quot;Thing&quot; to a new &quot;Mechanics&quot; that I created." compset="Configure" uniqueness="unique">
+    <tag group="fExclude" tag="fChaInc1"/>
+    <tag group="fExclude" tag="fChaInc2"/>
+    <tag group="fExclude" tag="fConInc1"/>
+    <tag group="fExclude" tag="fConInc2"/>
+    <tag group="fExclude" tag="fDexInc1"/>
+    <tag group="fExclude" tag="fDexInc2"/>
+    <tag group="fExclude" tag="fIntInc1"/>
+    <tag group="fExclude" tag="fIntInc2"/>
+    <tag group="fExclude" tag="fStrInc1"/>
+    <tag group="fExclude" tag="fStrInc2"/>
+    <tag group="fExclude" tag="fWisInc1"/>
+    <tag group="fExclude" tag="fWisInc2"/>
+    <tag group="fExclude" tag="fHdAbilImp"/>
+    <tag group="fExclude" tag="fHdFeat"/>
+    </thing>
+  <thing id="cfg5CProf" name="Proficiencies" description="This allows for having a single central place to add additional proficiencies to a character." compset="Configure" uniqueness="unique">
+    <fieldval field="cSkCandExp" value="component.BaseSkill &amp; !Helper.Obsolete"/>
+    <fieldval field="cTlCandExp" value="component.Tool &amp; !Helper.Obsolete"/>
+    <fieldval field="cSkCandEx2" value="component.BaseSkill &amp; !Helper.Obsolete"/>
+    <fieldval field="cTlCandEx2" value="component.Tool &amp; !Helper.Obsolete"/>
+    <eval phase="Attr" priority="10000"><![CDATA[
+      ~ The below logic is needed because we have two seperate lists
+      ~ for tools & skills. But we need to allow for a combination
+      ~ of tools/skills to be chosen.
+
+      ~ Total up all the skills and tools that have been chosen
+      field[cPhaStart].value += field[cSkillCur].value + field[cToolCur].value
+
+      ~ Set the Used values for both Tools/Skills to be the same
+      field[cToolCur].value = field[cPhaStart].value
+      field[cSkillCur].value = field[cPhaStart].value]]></eval>
+    </thing>
+  <thing id="cfg5CMagIn" name="Magic Initiate" description="Helper Thing for the feat Magic Initiate." compset="Configure" uniqueness="unique">
+    <tag group="Helper" tag="SpCountLev"/>
+    <tag group="Helper" tag="ClsCastLev"/>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If no spell class tags, do nothing &
+      doneif (tagcount[sClass.?] = 0)
+
+      ~ NOTE: I am thinking I found more bugs in 5e game system as
+      ~       I shouldn't have to do this to get spells to appear
+      ~       on the "Spells" tab.
+
+      ~ Generate SpellSort and SpellType tags
+      perform pulltags[sClass.?,SpellSort]
+      perform pulltags[sClass.?,SpellType]
+
+      ~ Loop through all the spell picks added on the "Magic Initiate"
+      ~ Configurable tab.
+      foreach pick in hero from BaseSpell where "CfgSpell.cfg5CMagIn"
+
+        ~ Set the SpellSort and SpellType tags which are needed
+        ~ to get spells to display correctly on the Spells tab
+        perform eachpick.pushtags[SpellSort.?]
+        perform eachpick.pushtags[SpellType.?]
+
+        ~ Pull the spell level selected and the deny tags so that
+        ~ we can set the message and selection list corretly.
+        perform eachpick.pulltags[sLevel.?]
+        perform eachpick.pulltags[ClsDenySp.?]
+
+        ~ If we are a cantrip add the helper cantrip tag
+        if (eachpick.tagis[sLevel.0] = 1) then
+          perform eachpick.assign[Helper.Cantrip]
+
+        ~.. otherwise we are level 1+ spell so make us a
+        ~   racial spell so we can limit its use to 1/longrest
+        else
+          perform eachpick.assign[Helper.SpellLike]
+          perform eachpick.assign[Usage.LongRest]
+          eachpick.field[trkMax].value += 1
+        endif
+      nexteach
+
+      ~ Set the spell selection expression to only be the selected class
+      field[cfgAllwSp1].text &= " & (sLevel.0|sLevel.1) & (" & tagids[sClass.?,"|"] & ") & !Helper.Helper"
+
+      ~ If we have Class Deny Spells then remove those from the list. This
+      ~ prevents the same spell from being added twice. This way we act
+      ~ like the normal spell portal does.
+      if (tagcount[ClsDenySp.?] <> 0) then
+        field[cfgAllwSp1].text &= " & !(" & tagids[ClsDenySp.?,"|"] & ")"
+      endif]]></eval>
+    <eval phase="Render" priority="99999999999" index="2"><![CDATA[
+      var nLevel0 as number
+      var nLevel1 as number
+
+      ~ Calculate the number of spells selected
+      nLevel0 = 2 - tagcount[sLevel.0]
+      nLevel1 = 1 - tagcount[sLevel.1]
+
+      ~ Set the correct message
+      If (nLevel0 + nLevel1 > 0) then
+        field[cfgAdTxSp1].text = "Add " & nLevel0 & " Cantrips and " & nLevel1 & " 1st-level spell"
+
+      ElseIf (nLevel0 + nLevel1 = 0) then
+        field[cfgAdTxSp1].text = "No more spells to add."
+
+      ElseIf (nLevel0 < 0) then
+        field[cfgAdTxSp1].text = "You have " & tagcount[sLevel.0] & " of 2 cantrips allowed."
+
+      ElseIf (nLevel1 < 0) then
+        field[cfgAdTxSp1].text = "You have " & tagcount[sLevel.1] & " of one 1st-level spell allowed."
+      Endif]]></eval>
+    </thing>
+  <thing id="cfg5CRitCa" name="Ritual Caster" description="Helper Thing for the feat Ritual Caster." compset="Configure" uniqueness="unique">
+    <fieldval field="cfgSpell1" value="Rituals"/>
+    <tag group="Helper" tag="ClsCastLev"/>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If no spell class tags, do nothing &
+      doneif (tagcount[sClass.?] = 0)
+
+      ~ NOTE: I am thinking I found more bugs in 5e game system as
+      ~       I shouldn't have to do this to get spells to appear
+      ~       on the "Spells" tab.
+
+      ~ Generate SpellSort and SpellType tags
+      perform pulltags[sClass.?,SpellSort]
+      perform pulltags[sClass.?,SpellType]
+
+      ~ Loop through all the spell picks added on the "Ritual Caster"
+      ~ Configurable tab.
+      foreach pick in hero from BaseSpell where "CfgSpell.cfg5CRitCa"
+
+        ~ Set the SpellSort and SpellType tags which are needed
+        ~ to get spells to display correctly on the Spells tab
+        perform eachpick.pushtags[SpellSort.?]
+        perform eachpick.pushtags[SpellType.?]
+
+        ~ Pull the spell level selected and the deny tags so that
+        ~ we can set the message and selection list corretly.
+        perform eachpick.pulltags[sLevel.?]
+        perform eachpick.pulltags[ClsDenySp.?]
+
+        ~ Set these as Ritual Spell-like spells so we display
+        ~ on the Spells tab.
+        perform eachpick.assign[Helper.SpellLike]
+        eachpick.field[livename].text = eachpick.field[thingname].text & " (Ritual)"
+
+      nexteach
+
+      ~ Set the spell selection expression to the selected class, Level 1 Ritual Spells
+      ~ and not Helper.Helper spells.
+      field[cfgAllwSp1].text &= " & Helper.RitualSpel & !Helper.Helper & (" & tagids[sClass.?,"|"] & ")"
+
+      ~ If we have Class Deny Spells then remove those from the list. This
+      ~ prevents the same spell from being added twice. This way we act
+      ~ like the normal spell portal does.
+      if (tagcount[ClsDenySp.?] <> 0) then
+        field[cfgAllwSp1].text &= " & !(" & tagids[ClsDenySp.?,"|"] & ")"
+      endif
+
+      ~ We have no "limit" of spells that can be added.
+      ~ So each time we select a spell increase the max to
+      ~ to match.
+      field[cfgMaxSp1].value += tagcount[sLevel.?]
+      field[cfgLeftSp1].value = 0]]></eval>
+    </thing>
+  <thing id="cfg5CMarAd" name="Maneuvers" description="This is a helper Thing for the Martial Adept feat and the Superior Technique Fighting Style." compset="Configure" uniqueness="unique">
+    <fieldval field="cfgAllow3" value="abCategory.FtrBMasMan"/>
+    <fieldval field="cfgObject3" value="Battle Master Maneuvers"/>
+    </thing>
+  <thing id="dt5CTrap" name="Traps" compset="DamageType"></thing>
+  <thing id="dt5CBPSNon" name="bludgeoning, piercing, and slashing from nonmagical weapons" compset="DamageType"></thing>
+  <thing id="cfg5CSpeSn" name="Spell Sniper" description="Helper Thing for the feat Spell Sniper." compset="Configure" uniqueness="unique">
+    <tag group="Helper" tag="ClsCastLev"/>
+    <eval phase="Final" priority="50000"><![CDATA[
+      ~ If no spell class tags, do nothing &
+      doneif (tagcount[sClass.?] = 0)
+
+      ~ NOTE: I am thinking I found more bugs in 5e game system as
+      ~       I shouldn't have to do this to get spells to appear
+      ~       on the "Spells" tab.
+
+      ~ Generate SpellSort and SpellType tags
+      perform pulltags[sClass.?,SpellSort]
+      perform pulltags[sClass.?,SpellType]
+
+      ~ Loop through all the spell picks added on the "Spell Sniper"
+      ~ Configurable tab.
+      foreach pick in hero from BaseSpell where "CfgSpell.cfg5CSpeSn"
+
+        ~ Set the SpellSort and SpellType tags which are needed
+        ~ to get spells to display correctly on the Spells tab
+        perform eachpick.pushtags[SpellSort.?]
+        perform eachpick.pushtags[SpellType.?]
+
+        ~ Pull the spell level selected and the deny tags so that
+        ~ we can set the message and selection list corretly.
+        perform eachpick.pulltags[sLevel.?]
+        perform eachpick.pulltags[ClsDenySp.?]
+
+        ~ If we are a cantrip add the helper cantrip tag
+        if (eachpick.tagis[sLevel.0] = 1) then
+          perform eachpick.assign[Helper.Cantrip]
+
+        ~.. otherwise we are level 1+ spell so make us a
+        ~   racial spell so we can limit its use to 1/longrest
+        else
+          perform eachpick.assign[Helper.SpellLike]
+          perform eachpick.assign[Usage.LongRest]
+          eachpick.field[trkMax].value += 1
+        endif
+      nexteach
+
+      ~ Set the spell selection expression to only be the selected class
+      field[cfgAllwSp1].text &= " & (sLevel.0) & (" & tagids[sClass.?,"|"] & ")"
+
+      ~ If we have Class Deny Spells then remove those from the list. This
+      ~ prevents the same spell from being added twice. This way we act
+      ~ like the normal spell portal does.
+      if (tagcount[ClsDenySp.?] <> 0) then
+        field[cfgAllwSp1].text &= " & !(" & tagids[ClsDenySp.?,"|"] & ")"
+      endif]]></eval>
+    <eval phase="Render" priority="99999999999" index="2"><![CDATA[
+      var nLevel0 as number
+      var nLevel1 as number
+
+      ~ Calculate the number of spells selected
+      nLevel0 = 1 - tagcount[sLevel.0]
+      nLevel1 = 0 - tagcount[sLevel.1]
+
+      ~ Set the correct message
+      If (nLevel0 > 0) then
+        field[cfgAdTxSp1].text = "Add " & nLevel0 & " Cantrips."
+
+      ElseIf (nLevel0 = 0) then
+        field[cfgAdTxSp1].text = "No more spells to add."
+
+      ElseIf (nLevel0 < 0) then
+        field[cfgAdTxSp1].text = "You have " & tagcount[sLevel.0] & " of 1 cantrips allowed."
+
+      Endif]]></eval>
+    </thing>
+  <thing id="gt5CHerbs" name="Herbs" compset="GearType" isshowonly="yes"></thing>
+  <thing id="g5CHerbs" name="Herbs" description="Herbs and other ingredients found in the wild have long been a staple part of the healer&apos;s toolkit. Indeed, herbalism is linked not just with healing, but also with protection, witchcraft, and – of course – poison. Whether applied as a poultice, infused as a incense, drank as a soup or tea, nature&apos;s power over the world is undeniable, especially when applied by those skilled in its use. \n\nHerbalism is covered by three skills – Medicine (for healing herbs), Nature (for most other herbs), and Religion (for herbs dealing with the undead and the like). Preparation of an herb is an Intelligence (Nature), Wisdom (Medicine), or Wisdom (Religion) check, and requires proficiency with a herbalism kit, which contains the necessary tools and implements. \n\nHerbs are divided into three types: healing, endowment, and warding. Healing herbs restore hit points, and help deal with poison and illness. Endowment herbs grant abilities, including enhanced senses and adrenalin-like &apos;buffs&apos;. Warding herbs protect the user from things, including the undead." compset="Gear" isshowonly="yes">
+    <tag group="explicit" tag="10"/>
+    <tag group="GearType" tag="gt5CHerbs" name="Herbs" abbrev="Herbs"/>
+    </thing>
+  <thing id="gt5CAlcItm" name="Alchemical Items" compset="GearType" summary="Alchemical Items" isshowonly="yes"></thing>
+  <thing id="g5CAlchItm" name="Alchemical Items" description="Alchemists are masters of haphazard mprovisation and calculated improvement. Even lacking the right tool, the alchemist is almost always working up a new concoction. Here you’ll find a few new items to add to the alchemist’s arsenal, and a new variant rule for crafting them.\n\nOn an average day, a craftsman produces about 5 gp worth of marketable goods. Alchemy is no different—but oftentimes, alchemists lack\nthe required downtime. To quickly produce alchemical items, you may make a DC 10 Intelligence (Alchemist’s Tools) check. Your daily progress is doubled for every 5 points by which you exceed this DC. If you fail by 5 or more, you ruin the day’s ingredients, losing the day’s\nraw materials and 5 gp of progress. You may attempt to craft during an adventuring day, but doing so imposes disadvantage on your crafting\ncheck to represent various complications and interruptions" compset="Gear" isshowonly="yes">
+    <tag group="GearType" tag="gt5CAlcItm" name="Alchemical Items"/>
+    <tag group="explicit" tag="50"/>
+    </thing>
+  <thing id="cfg5CRes" name="Resistances" description="This allows for having a single central place to add additional damage resistances to a character." compset="Configure" uniqueness="unique">
+    <fieldval field="cSkCandExp" value="component.BaseSkill &amp; !Helper.Obsolete"/>
+    <fieldval field="cSkCandEx2" value="component.BaseSkill &amp; !Helper.Obsolete"/>
+    <fieldval field="cTlCandExp" value="component.Tool &amp; !Helper.Obsolete"/>
+    <fieldval field="cTlCandEx2" value="component.Tool &amp; !Helper.Obsolete"/>
+    <eval phase="Attr" priority="10000"><![CDATA[
+      ~ The below logic is needed because we have two seperate lists
+      ~ for tools & skills. But we need to allow for a combination
+      ~ of tools/skills to be chosen.
+
+      ~ Total up all the skills and tools that have been chosen
+      field[cPhaStart].value += field[cSkillCur].value + field[cToolCur].value
+
+      ~ Set the Used values for both Tools/Skills to be the same
+      field[cToolCur].value = field[cPhaStart].value
+      field[cSkillCur].value = field[cPhaStart].value]]></eval>
+    </thing>
+  </document>

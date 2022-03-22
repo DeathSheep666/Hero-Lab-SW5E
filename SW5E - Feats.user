@@ -1,0 +1,1465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document signature="Hero Lab Data">
+  <thing id="fPRAcePilot" name="Ace Pilot" description="You’re quite experienced both on land and in the air, be it from time in a navy, as a mercenary, or perhaps even piracy. You gain the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You gain proficiency in the Piloting skill. If you are already proficient in it, you instead gain expertise in it.\n- Whenever you make an Intelligence (Investigation) or Wisdom (Perception) check related to vehicles or ships, you are considered to have expertise in the Investigation or Perception skill." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPRPiloting"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aINT].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRAcrobat" name="Acrobat" description="You become more nimble, gaining the following benefits:\n\n- Increase your Dexterity score by 1, to a maximum of 20.\n- You gain proficiency in the Acrobatics skill. If you are already proficient in it, you instead gain expertise in it.\n- As a bonus action, you can make a DC 15 Dexterity (Acrobatics) check. If you succeed, difficult terrain doesn’t cost you extra movement until the end of the current turn." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aDEX].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skAcrobat"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRActor" name="Actor" description="Skilled at mimicry and dramatics, you gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You have advantage on Charisma (Deception) and Charisma (Performance) checks when trying to pass yourself off as a different person.\n- You can mimic the speech of another person or the sounds made by other creatures. You must have heard the person speaking, or heard the creature make the sound, for at least 1 minute. A successful Wisdom (Insight) check contested by your Charisma (Deception) check allows a listener to determine that the effect is faked." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRAlert" name="Alert" description="Always on the lookout for danger, you gain the following benefits:\n\n- You gain a +5 bonus to initiative.\n- You can’t be surprised while you are conscious.\n- Other creatures don’t gain advantage on attack rolls against you as a result of being unseen by you." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+      
+~ Add a +5 bonus to our Initiative
+
+       #skillbonus[Initiative] = #skillbonus[Initiative] + 5]]></eval>
+    </thing>
+  <thing id="fPRAnimHand" name="Animal Handler" description="You master the techniques needed to train and handle animals. You gain the following benefits:\n\n- Increase your Wisdom score by 1, to a maximum of 20.\n- You gain proficiency in the Animal Handling skill. If you are already proficient in it, you instead gain expertise in it.\n- You can use a bonus action on your turn to command one friendly beast within 60 feet of you that can hear you and that isn’t currently following the command of someone else. You decide now what action the beast will take and where it will move during its next turn, or you issue a general command that lasts for 1 minute, such as to guard a particular area." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aWIS].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skAnimHand"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRAthlete" name="Athlete" description="You have undergone extensive physical training to gain the following benefits:\n\n- Increase your Strength or Dexterity score by 1, to a maximum of 20.\n- When you are prone, standing up uses only 5 feet of your movement.\n- Climbing doesn’t halve your speed.\n- You can make a running long jump or a running high jump after moving only 5 feet on foot, rather than 10 feet." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aSTR].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aDEX].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRBatScar" name="Battle Scarred" description="You’ve spent a lifetime fighting, with the scars to prove it. You gain the following benefits:\n\n- Increase your Constitution score by 1, to a maximum of 20.\n- When you roll a 19 or a 20 on the d20 for a death saving throw, you regain 1 hit point.\n- When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. Once you’ve used this ability, you must complete a long rest before you can use it again." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCON].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRBountLuck" name="Bountiful Luck" description="{i}{b}Prerequisite{/b}: 4th level, {/i}Lucky {i}feat{/i}\n\nYour people have extraordinary luck, which you have learned to lend to your companions when you see them falter. You’re not sure how you do it; you just wish it, and it happens. Surely a sign of fortune’s favor!\n\nWhen an ally you can see within 30 feet of you rolls a 1 on the d20 for an attack roll, an ability check, or a saving throw, you can use your reaction and expend 1 luck point to let the ally reroll the die. The ally must use the new roll.\n\nWhen you use this ability, you can’t use luck points before the end of your next turn." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="abRange" value="30"/>
+    <tag group="abRange" tag="Feet"/>
+    <tag group="abDuration" tag="Instant"/>
+    <tag group="abAction" tag="Reaction"/>
+    <pickreq thing="fPRLucky"/>
+    <exprreq message="4th level required."><![CDATA[#totallevelcount[] >= 4]]></exprreq>
+    </thing>
+  <thing id="fPRBrawny" name="Brawny" description="You become stronger, gaining the following benefits:\n\n- Increase your Strength score by 1, to a maximum of 20.\n- You gain proficiency in the Athletics skill. If you are already proficient in it, you instead gain expertise in it.\n- Your carrying capacity and the weight you can push, drag, or lift doubles. If it would already double, it instead triples." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First" priority="10000">hero.childfound[aSTR].field[aClassMod].value += field[abValue].value</eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skAthletic"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="Final" priority="10000" index="3"><![CDATA[      doneif (tagis[Helper.Disable] <> 0)
+
+
+
+      ~ double our encumbrance
+      
+herofield[tEncumLgt].value = herofield[tEncumLgt].value * 2
+      
+herofield[tEncumHvy].value = herofield[tEncumHvy].value * 2
+      herofield[tEncumMax].value = herofield[tEncumMax].value * 2]]></eval>
+    </thing>
+  <thing id="fPRCharmer" name="Charmer" description="You’ve master the art of charming those around you, gaining the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You gain proficiency in the Persuasion skill. If you are already proficient in it, you instead gain expertise in it.\n- If you spend 1 minute talking to someone who can understand what you say, you can make a Charisma (Persuasion) check contested by the creature’s Wisdom (Insight) check. If you or your companions are fighting the creature, your check automatically fails. If your check succeeds, the target is charmed by you as long as it remains within 60 feet of you and for 1 minute thereafter." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPersuas"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aCHA].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRCompetitor" name="Competitor" description="You have a strong aptitude for competing. Select one gaming set. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You gain proficiency in the chosen gaming set. If you are already proficient with it, you instead gain expertise with it.\n- As long as you spend at least 1 minute using your gaming set, you can’t have disadvantage on Intelligence checks you make to use the gaming set, Charisma (Deception) checks you make to bluff with the gaming set, or Wisdom (Insight) checks you make to read an opponent with whom you are competing with the gaming set.\n\nYou can select this feat multiple times. Each time you do so, you must choose a different gaming set." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="cfgPRCompetitor" name="Competitor" description="Helper Thing for the feat Competitor" compset="Configure" uniqueness="unique">
+    <fieldval field="cToolMax" value="1"/>
+    <tag group="AllowTool1" tag="Gaming"/>
+    </thing>
+  <thing id="fPRDungDelver" name="Dungeon Delver" description="Alert to the hidden traps and secret doors found in many dungeons, you gain the following benefits:\n\n- Increase your Intelligence or Wisdom score by 1, to a maximum of 20.\n- You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doors.\n- You have advantage on saving throws made to avoid or resist traps.\n- You have resistance to the damage dealt by traps.\n- You can search for traps while traveling at a normal pace, instead of only at a slow pace." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr &amp; (IsAttr.aINT | IsAttr.aWIS)"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRCrafter" name="Crafter" description="You have a knack for crafting; you work with greater efficiency and produce goods of higher quality. Select one type of artisan’s implements. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You gain proficiency with the chosen tool. If you are already proficient with it, you instead gain expertise with it.\n- When you craft something with the chosen tool, the total market value you can craft increases 50 cr per day. If you have expertise with it, the market value instead increases by 100 cr per day.\n- If you use the tool you’ve selected to practice a profession during downtime, you can support a lifestyle one higher than you would normally be able to.\n\n You can select this feat multiple times. Each time you do so, you must choose a different set of artisan’s implements." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRDurable" name="Durable" description="Hardy and resilient, you gain the following benefits:\n\n- Increase your Constitution score by 1, to a maximum of 20.\n- When you roll a Hit Die to regain hit points, the minimum number of hit points you can regain from the roll equals twice your Constitution modifier (minimum of 2).\n- Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit points." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First" priority="10000">hero.childfound[aCON].field[aClassMod].value += field[abValue].value</eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[      ~ if we've been disabled, get out now
+
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      herofield[tBonusHP].value += field[abValue2].value]]></eval>
+    <eval phase="PostLevel" priority="5000" index="3">field[abValue2].value += maximum(herofield[tHitDice].value, 1)*2</eval>
+    </thing>
+  <thing id="fPREmpathic" name="Empathic" description="You possess keen insight into how other people think and feel. You gain the following benefits:\n\n- Increase your Wisdom score by 1, to a maximum of 20.\n- You gain proficiency in the Insight skill. If you are already proficient in it, you instead gain expertise in it.\n- You can use your action to try to get uncanny insight about one humanoid you can see within 30 feet of you. Make a Wisdom (Insight) check contested by the target’s Charisma (Deception) check. On a success, you have advantage on attack rolls and ability checks against the target until the end of your next turn." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skInsight"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aWIS].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPREntertainer" name="Entertainer" description="You have a natural gift for performing. Select one musical instrument. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You gain proficiency in the chosen musical instrument. If you are already proficient with it, you instead gain expertise with it.\n- While playing your chosen musical instrument, you can always readily read the emotions of those paying attention to you. During this time, and for up to one minute after completing, you have advantage on Wisdom (Insight) checks to read the emotions of those you performed for.\n- You can select this feat multiple times. Each time you do so, you must choose a different musical instrument." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRFanatic" name="Fanatic" description="{i}{b}Prerequisite{/b}: 4th level{/i}\n\nEvery blow that hits your enemies make you feel closer to victory, making you shake in excitement. You gain the following benefits:\n\n- When you score a critical hit with an attack roll or reduce a creature to 0 hit points, you can make one weapon attack as a bonus action.\n- Whenever a creature you can see within 30 feet is reduced to 0 hit points, you go into a fervor gaining temporary hit points equal to 1d4 + your Constitution modifier." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRFeignConf" name="Feigned Confidence" description="You’ve spent years pretending you know what you’re doing, gaining the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- When you would make an ability check with a skill or tool that doesn’t add your proficiency bonus, you can first make a DC 15 Charisma (Deception) check. On a success, you can add your proficiency bonus to the initial ability check. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain all expended uses when you finish a short or long rest." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="Usage" tag="ShortRest"/>
+    <tag group="ChargeAttr" tag="aCHA"/>
+    <tag group="User" tag="Tracker"/>
+    <tag group="ChargeCalc" tag="AttrOnly"/>
+    <tag group="ChargeCalc" tag="FinalMin1"/>
+    <eval phase="First" priority="10000">hero.childfound[aCHA].field[aClassMod].value += field[abValue].value</eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skInsight"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRFightStylist" name="Fighting Stylist" description="{i}{b}Prerequisite{/b}: 4th level{/i}\n\nYou adopt a particular style of fighting as your specialty, gaining the following benefits:\n\n- Increase your Strength, Dexterity, or Constitution score by 1, to a maximum of 20.\n- Choose one of the fighting style options, detailed later in this chapter.\n\nYou can select this feat multiple times." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr &amp; (IsAttr.aSTR | IsAttr.aDEX | IsAttr.aCON)"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <bootstrap thing="cfgPRFightStyle"></bootstrap>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    <eval phase="First" index="2"><![CDATA[      ~ If we're disabled, do nothing &
+
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.childfound[cfgPRFightStyle].field[cfgMax1].value += 1]]></eval>
+    </thing>
+  <thing id="fPRFightMaster" name="Fighting Master" description="{i}{b}Prerequisite{/b}: 4th level{/i}\n\nYou’ve mastered a particular style of fighting. Choose one of the fighting mastery options, detailed later in this chapter. You can select this feat multiple times." compset="Feat" maxlimit="99">
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <bootstrap thing="cfgPRFghtMastery"></bootstrap>
+    <eval phase="First" index="2"><![CDATA[      ~ If we're disabled, do nothing &
+
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.childfound[cfgPRFghtMastery].field[cfgMax4].value += 1]]></eval>
+    <exprreq message="4th level required"><![CDATA[#totallevelcount[] >= 4]]></exprreq>
+    </thing>
+  <thing id="fPRForceGuide" name="Force Guidance" description="{i}{b}Prerequisite{/b}: The ability to cast force powers{/i}\n\nYou’ve learned to utilize your gift with the Force in a specific, unique way. You gain the following benefits\n\n- Increase your Wisdom or Charisma score by 1, to a maximum of 20.\n- Choose a skill or tool in which you are proficient. When you make an ability check with the chosen skill or tool, you can add half your Wisdom or Charisma modifier (your choice, rounded down, minimum of one) to the check if it doesn’t already include that modifier. You can use this feature a number of times equal to your Wisdom or  Charisma modifier (your choice, a minimum of once). You regain all expended uses when you complete a long rest.\n- You can select this feat multiple times. Each time you do so, you must choose a different skill or tool." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr &amp; (IsAttr.aWIS | IsAttr.aCHA)"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRFrcPersonality" name="Force of Personality" description="Rooms never go unalerted to your presence, and the strength of your personality make others lose focus on their own social game. Powers and other effects infrequently override your force of will. You gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You can use your Charisma modifier instead of your Wisdom modifier when making Insight checks.\n- When you would make a Wisdom saving throw, you can instead make a Charisma saving throw. You can use this feature a number of times equal to your proficiency bonus. You regain all expended uses of this feature when you complete a long rest." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPersuas"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aCHA].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRFrcSense" name="Force-Sensitive" description="{i}{b}Prerequisite{/b}: Type humanoid{/i}\n\nYou know two at-will force powers. When you reach 3rd level, you learn one 1st-level force power, which you can cast once per long rest. When you reach 5th level, you learn one 2nd-level force power, which you can once per long rest. Your forcecasting ability is Wisdom or Charisma (depending on power alignment). Additionally, you lose the Force-Insensitive special trait if you have it." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr &amp; (IsAttr.aWIS | IsAttr.aCHA)"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRForcefulVigor" name="Forceful Vigor" description="Your strength and virility rarely go unnoticed, often to the point of distraction. You gain the following benefits:\n\n- Increase your Strength score by 1, to a maximum of 20.\n- You can use your Strength modifier instead of your Constitution modifier when making Constitution checks.\n- When you would make a Constitution saving throw, you can instead make a Strength saving throw. You can use this feature a number of times equal to your proficiency bonus. You regain all expended uses of this feature when you complete a long rest." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPersuas"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aSTR].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRGalvPres" name="Galvanizing Presence" description="Your presence on the battlefield is a source of inspiration. You gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- As a bonus action, you let out a rallying war cry, ending the frightened or charmed condition on yourself and a number of allies that can hear you equal to your Charisma modifier (minimum of one). Once you’ve used this ability, you must complete a short or long rest before you can use it again." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPersuas"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aCHA].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRHaggler" name="Haggler" description="Your skills at bartering have granted you the following benefits:\n\n- Increase your Charisma score by 1 up to a maximum of 20.\n- You have advantage on Charisma (Persuasion) and Charisma (Deception) checks when attempting to barter or trade.\n- You are always aware of the current monetary value for any unenhanced or common enhanced item. Whenever you identify an item, you gain a rough estimate of its current monetary value." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPersuas"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aCHA].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRHealer" name="Healer" description="You are an able medic, allowing you to mend wounds quickly and get your allies back in the fight. You gain the following benefits:\n\n- Increase your Intelligence or Wisdom score by 1, to a maximum of 20.\n- When you use a traumakit to stabilize a dying creature, that creature also regains 1 hit point.\n- As an action, you can spend one use of a traumakit to tend to a creature and restore 1d6 + 4 hit points to it, plus additional hit points equal to the creature’s maximum number of Hit Dice. The creature can’t regain hit points again in this way until it finishes a short or long rest." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Intelligence"/>
+    <arrayval field="usrArray" index="1" value="Wisdom"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aSTR].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aDEX].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRInspiL" name="Inspiring Leader" description="{i}{b}Prerequisite:{/b} Charisma 13{/i}\n\nYou can spend 10 minutes inspiring your companions, shoring up their resolve to fight. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each creature can gain temporary hit points equal to your level + your Charisma modifier. A creature can’t gain temporary hit points from this feat again until it has finished a short or long rest." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="Final" priority="500"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+field[abValue].value += #totallevelcount[] + #attrmod[aCHA]
+
+
+
+var temphp as number
+
+temphp = maximum(field[abValue].value,1)
+
+hero.findchild[TempHpPool,"Value.2"].field[thpMinAllw].value = temphp
+
+hero.findchild[TempHpPool,"Value.2"].field[thpMaxAllw].value = temphp]]></eval>
+    <exprreq message="Charisma 13 or higher required."><![CDATA[#attrvalue[aCHA] >= 13]]></exprreq>
+    </thing>
+  <thing id="fPRInvestigator" name="Investigator" description="You have an eye for detail and can pick out the smallest clues. You gain the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You gain proficiency in the Investigation skill. If you are already proficient in it, you instead gain expertise in it.\n- You can take the Search action as a bonus action." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skInvestig"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRKeenMind" name="Keen Mind" description="You have a mind that can track time, direction, and detail with uncanny precision. You gain the following benefits.\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You always know which way is north.\n- You always know the number of hours left before the next sunrise or sunset.\n- You can accurately recall anything you have seen or heard within the past month." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRArmrExpert" name="Armor Expert" description="You have trained to master the use of light armor, gaining the following benefits:\n\n- Increase your Strength, Dexterity, or Constitution score by 1, to a maximum of 20.\n- You gain proficiency with light armor. If you are already proficient with light armor, instead while you are wearing light armor, your speed increases by 5 feet.\n\nYou can take this feat twice." compset="Feat" maxlimit="4">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <arrayval field="usrArray" index="2" value="Constitution"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1
+
+
+      
+      ~ Give proficiency with light armor
+~      if (ArmProfGrp.ArmorLight = 0)
+~          then perform hero.pushtags[ArmProfGrp.?]
+~      else
+~          foreach pick in hero from BaseArmor where "ArmorClass.Light & Helper.CurrArmor"
+~          perform hero.child[Speed].field[tSpeed].value += 5
+~      endif]]></eval>
+    </thing>
+  <thing id="fPRLinguist" name="Linguist" description="You have studied languages and codes, gaining the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You learn three languages of your choice.\n- You can ably create written ciphers. Others can’t decipher a code you create unless you teach them, they succeed on an Intelligence check (DC = your Intelligence score + your proficiency bonus), or they use a power to decipher it." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+      doneif (tagis[Helper.Disable] = 1)
+
+      hero.child[aINT].field[aStartMod].value += 1
+
+      hero.child[resLangBck].field[resMax].value += 3]]></eval>
+    </thing>
+  <thing id="fPRLoreMaster" name="Loremaster" description="Your study of history rewards you with the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You gain proficiency in the Lore skill. If you are already proficient in it, you instead gain expertise in it.\n- When you take the Help action to aid another creature’s ability check, you can make a DC 15 Intelligence (Lore) check. On a success, that creature’s check gains a bonus equal to your proficiency bonus, as you share pertinent advice and historical examples. To receive this bonus, the creature must be able to understand what you’re saying." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPRLore"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRLucky" name="Lucky" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou have inexplicable luck that seems to kick in at just the right moment.\n\nYou have 3 luck points. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw.\n\nYou can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker’s roll or yours. If more than one creature spends a luck point to influence the outcome o f a roll, the points cancel each other out; no additional dice are rolled.\n\nYou regain your expended luck points when you finish a long rest." compset="Feat" uniqueness="useronce">
+    <fieldval field="trkMax" value="3"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="Usage" tag="LongRest"/>
+    </thing>
+  <thing id="fPRMedic" name="Medic" description="You master the physician’s arts, gaining the following benefits:\n\n- Increase your Wisdom score by 1, to a maximum of 20.\n- You gain proficiency in the Medicine skill. If you are already proficient in it, you instead gain expertise in it.\n- During a short rest, you can clean and bind the wounds of up to six willing beasts and humanoids. Make a DC 15 Wisdom (Medicine) check for each creature. On a success, if a creature spends a Hit Die during this rest, that creature can forgo the roll and instead regain the maximum number of hit points the die can restore. A creature can do so only once per rest, regardless of how many Hit Dice it spends." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aWIS].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skMedicine"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRMobile" name="Mobile" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou are exceptionally speedy and agile. You gain the following benefits:\n\n- Your speed increases by 10 feet.\n- When you use the Dash action, difficult terrain doesn’t cost you extra movement on that turn.\n- When you make a melee attack against a creature, you don’t provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not." compset="Feat" uniqueness="useronce">
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+ 
+      hero.child[Speed].field[tSpeed].value += 10]]></eval>
+    </thing>
+  <thing id="fPRNaturalist" name="Naturalist" description="Your extensive study of nature rewards you with the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You gain proficiency in the Nature skill. If you are already proficient in it, you instead gain expertise in it.\n- You learn the {i}toxin scan{/i} tech power. You can cast it once, using supplies scavenged around you, without the use of a wristpad and without spending tech points, and you regain the ability to do so when you finish a long rest." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skNature"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRObservant" name="Observant" description="Quick to notice details of your environment, you gain the following benefits:\n\n- Increase your Intelligence or Wisdom score by 1, to a maximum of 20.\n- If you can see a creature’s mouth while it is speaking a language you understand, you can interpret what it’s saying by reading its lips.\n- You are considered to have advantage when determining your passive Wisdom (Perception) and passive Intelligence (Investigation) scores." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Intelligence"/>
+    <arrayval field="usrArray" index="1" value="Wisdom"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aINT].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aWIS].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRPerceptive" name="Perceptive" description="You hone your senses until they become razor sharp. You gain the following benefits:\n\n- Increase your Wisdom score by 1, to a maximum of 20.\n- You gain proficiency in the Perception skill. If you are already proficient in it, you instead gain expertise in it.\n- Being in a lightly obscured area doesn’t impose disadvantage on your Wisdom (Perception) checks if you can both see and hear." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aWIS].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPercep"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRPerformer" name="Performer" description="You master performance so that you can command any stage. You gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You gain proficiency in the Performance skill. If you are already proficient in it, you instead gain expertise in it.\n- While performing, you can try to distract one humanoid you can see who can see and hear you. Make a Charisma (Performance) check contested by the humanoid’s Wisdom (Insight) check. If your check succeeds, you grab the humanoid’s attention enough that it makes Wisdom (Perception) and Intelligence (Investigation) checks with disadvantage until you stop performing." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPerform"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRPowerAdept" name="Power Adept" description="{i}{b}Prerequisite:{/b} 4th level, the ability to cast force or tech powers{/i}\n\nWhen you gain this feat, choose one of the following damage types: acid, cold, fire, force, lightning, or necrotic. Powers you cast ignore resistance to damage of the chosen type. In addition, when you roll damage for a power you cast that deals damage of that type, you can treat any 1 on a damage die as a 2.\n\nYou can select this feat multiple times. Each time you do so, you must choose a different damage type." compset="Feat" maxlimit="6">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRPracticed" name="Practiced" description="You have acquired skills over your career, gaining the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You gain proficiency in any combination of two skills or tools of your choice." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <fieldval field="abValue" value="2"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="PostLevel" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1
+
+      var NumOfProf as number
+
+      ~ Increase or decrease the number of proficiencies
+ 
+      NumOfProf = field[abValue].value
+
+      call 5CAddProf</eval>
+    </thing>
+  <thing id="fPRPromComm" name="Promising Commander" description="You’ve trained relentless to lead your allies on the field of battle, gaining the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- As an action, you can gain tactical insight. For one minute, once per turn you can utter a special command or warning whenever an ally you can see within 30 feet makes an attack roll or saving throw. This creature can add a d4 to the roll provided it can hear and understand you. A creature can only benefit from one such die at a time. Once you’ve used this feature, you must complete a short or long rest before you can use it again." compset="Feat" uniqueness="useronce">
+    <fieldval field="abRange" value="30"/>
+    <fieldval field="abDuration" value="1"/>
+    <tag group="abDuration" tag="Minute"/>
+    <tag group="abAction" tag="Action"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Feet"/>
+    <tag group="Usage" tag="ShortRest"/>
+    <tag group="User" tag="Tracker"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRQuickFinger" name="Quick-Fingered" description="Your nimble fingers and agility let you perform sleight of hand. You gain the following benefits:\n\n- Increase your Dexterity score by 1, to a maximum of 20.\n- You gain proficiency in the Sleight of Hand skill. If you are already proficient in it, you instead gain expertise in it.\n- As a bonus action, you can make a Dexterity (Sleight of Hand) check to plant something on someone else, conceal an object on a creature, lift a purse, or take something from a pocket." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aDEX].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skSleight"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRResilient" name="Resilient" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nChoose one ability score. You gain the following benefits:\n\nIncrease the chosen ability score by 1, to a maximum of 20.\nYou gain proficiency in saving throws using the chosen ability." compset="Feat" uniqueness="useronce">
+    <fieldval field="usrCandid1" value="component.BaseSave &amp; !Hide.Save"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+ 
+      ~ Pull the save proficiency tag and push to hero
+
+      perform field[usrChosen1].chosen.pulltags[ProfSave.?]
+
+      perform hero.pushtags[ProfSave.?]
+
+
+
+      ~ Find the associated ability score and increase it by 1
+
+      hero.findchild[BaseAttr,field[usrChosen1].chosen.tagids[SaveAbil.?]].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRSilverTongue" name="Silver-Tongued" description="You develop your conversational skill to better deceive others. You gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You gain proficiency in the Deception skill. If you are already proficient in it, you instead gain expertise in it.\n- When you take the Attack action, you can replace one attack with an attempt to deceive one humanoid you can see within 30 feet of you that can see and hear you. Make a Charisma (Deception) check contested by the target’s Wisdom (Insight) check. If your check succeeds, your movement doesn’t provoke opportunity attacks from the target and your attack rolls against it have advantage; both benefits last until the end of your next turn or until you use this ability on a different target. If your check fails, the target can’t be deceived by you in this way for 1 hour." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skDecept"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRSnapInter" name="Snappy Interjection" description="You’ve mastered a quick tongue to aid your allies. You gain the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- Once per short or long rest, when an ally makes an attack roll, an ability check or a saving throw, you can spend your reaction to give them advantage on the roll." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Usage" tag="ShortRest"/>
+    <tag group="User" tag="Tracker"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRSpecialist" name="Specialist" description="You have focused training with a specific tool. Select one type of specialist’s kit. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You gain proficiency with the chosen kit. If you are already proficient with it, you instead gain expertise with it.\n- You can attempt ability checks with the chosen kit without the kit present, but you have disadvantage on the check when you do so.\n- Whenever you make an ability check with the chosen kit and you don’t have disadvantage on the check, you can treat a d20 roll of 9 or lower as a 10, as long as you spend at least 1 minute on the check.\n\nYou can select this feat multiple times. Each time you do so, you must choose a different specialist’s kit." compset="Feat" maxlimit="99">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="PreAttr" priority="10000">field[usrChosen1].chosen.field[aStartMod].value += 1</eval>
+    </thing>
+  <thing id="fPRStealthy" name="Stealthy" description="You know how best to hide, gaining the following benefits:\n\n- Increase your Dexterity score by 1, to a maximum of 20.\n- You gain proficiency in the Stealth skill. If you are already proficient in it, you instead gain expertise in it.\n- If you are hidden, you can move up to 10 feet in the open without revealing yourself if you end the move in a position where you’re not clearly visible." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aDEX].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skStealth"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRSuprAcc" name="Supreme Accuracy" description="{i}{b}Prerequisite:{/b} 4th level; Dexterity, Intelligence, Wisdom or Charisma 13{/i}\n\nYou have undergone extensive physical training to gain the following benefits:\n\nYou have uncanny aim with attacks that rely on precision. You gain the following benefits:\n\n- Increase your Dexterity, Intelligence, Wisdom, or Charisma score by 1, to a maximum of 20.\n- Whenever you have advantage on an attack roll using Dexterity, Intelligence, Wisdom, or Charisma you can reroll one of the dice once." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Dexterity"/>
+    <arrayval field="usrArray" index="1" value="Intelligence"/>
+    <arrayval field="usrArray" index="2" value="Wisdom"/>
+    <arrayval field="usrArray" index="3" value="Charisma"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aDEX].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aINT].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 2) then
+
+        hero.child[aWIS].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aCHA].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRSurvivalist" name="Survivalist" description="You master wilderness lore, gaining the following benefits:\n\n- Increase your Wisdom score by 1, to a maximum of 20.\n- You gain proficiency in the Survival skill. If you are already proficient in it, you instead gain expertise in it.\n- You learn the alarm tech power. You can cast it once, using supplies scavenged around you, without the use of a wristpad and without spending tech points, and you regain the ability to do so when you finish a long rest." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aWIS].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skSurvival"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRTechDab" name="Tech Dabbler" description="You know two at-will tech powers. When you reach 3rd level, you learn and can cast one 1st-level tech power once per long rest. When you reach 5th level, you learn and can cast one 2nd-level tech power once per long rest. Your techcasting ability is Intelligence. You require use of a wristpad for these powers. Additionally, you lose the Tech-Impaired special trait if you have it." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRTechie" name="Techie" description="You master the theory and practice of technology, gaining the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You gain proficiency in the Technology skill. If you are already proficient in it, you instead gain expertise in it.\n- You learn the repair droid tech power. You can cast it once, using supplies scavenged around you, without the use of a wristpad and without spending tech points, and you regain the ability to do so when you finish a long rest." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skPRTech"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRThreat" name="Threatening" description="You become fearsome to others, gaining the following benefits:\n\n- Increase your Charisma score by 1, to a maximum of 20.\n- You gain proficiency in the Intimidation skill. If you are already proficient in it, you instead gain expertise in it.\n- When you take the Attack action, you can replace one attack with an attempt to demoralize one humanoid you can see within 30 feet of you that can see and hear you. Make a Charisma (Intimidation) check contested by the target’s Wisdom (Insight) check. If your check succeeds, the target is frightened until the end of your next turn. If your check fails, the target can’t be frightened by you in this way for 1 hour." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aCHA].field[aStartMod].value += 1]]></eval>
+    <eval phase="PostLevel" priority="15500" index="2"><![CDATA[doneif (tagis[Helper.ShowSpec] = 0)
+
+doneif (tagis[Helper.Disable] <> 0)
+
+
+foreach pick in hero from BaseSkill where "thingid.skIntim"
+
+     if (eachpick.tagis[Helper.Proficient] = 0) then
+ 
+          perform eachpick.assign[Helper.Proficient]
+
+     elseif (eachpick.tagis[Helper.Proficient] <> 0) then
+
+          perform eachpick.assign[Helper.ProfDouble]
+
+     endif
+
+nexteach]]></eval>
+    </thing>
+  <thing id="fPRTough" name="Tough" description="You have the blood of heroes flowing through your veins. You gain the following benefits:\n\n-  Increase your Constitution score by 1, to a maximum of 20.\n- Whenever you take the Dodge action in combat, you can spend one Hit Die to heal yourself. Roll the die, add your Constitution modifier, and regain a number of hit points equal to the total (minimum of one)." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      hero.child[aCON].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRWeaponExpert" name="Weapon Expert" description="You have practiced extensively with a variety of weapons, gaining the following benefits:\n\n- Increase your Strength, Dexterity, or Constitution score by 1, to a maximum of 20.\n- You gain proficiency with all blasters, lightweapons, and vibroweapons. If you are already proficient with all blasters, lightweapons or vibroweapons, instead once per turn when you would roll damage for a weapon attack using a weapon from a category in which you are proficient with all weapons, you can choose to have advantage.\n\nYou can take this feat twice." compset="Feat" maxlimit="2">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <arrayval field="usrArray" index="2" value="Constitution"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aSTR].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aDEX].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 2) then
+
+        hero.child[aCON].field[aStartMod].value += 1
+
+      endif]]></eval>
+    <eval phase="PreLevel" priority="10000" index="2">perform hero.pulltags[WepProf.?]
+      perform hero.pushtags[WepProf.?]</eval>
+    </thing>
+  <thing id="fPRAugCyb" name="Augmented Cyborg" description="You’ve experimented with cybernetic augmentations, granting the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- Choose one cybernetic augmentation of standard rarity from Appendix A. That augmentation is installed and doesn’t count against the maximum cybernetic augmentations you can support, but it does count towards your total cybernetics augmentations as shown in the Cybernetic Augmentations Side Effects table in Chapter 7." compset="Feat" maxlimit="4">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <arrayval field="usrArray" index="2" value="Constitution"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRClimber" name="Climber" description="You excel at scaling cliffsides, hills, trees, and general climbing. You gain the following benefits:\n\n- Increase your Strength score by 1, to a maximum of 20.\n- You gain a climbing speed equal to your movement speed.\n- You have advantage on ability checks and saving throws to avoid falling off or down while climbing.\n- You can spend 5 minutes instructing, pointing out handholds, and guiding other creatures before making a climb. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you. Each creature can add a 1d6 to any ability check or saving throw they make for that climb." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <bootstrap thing="xClimb"></bootstrap>
+    <eval phase="Final" priority="10000" index="3">var myspeed as number
+
+
+
+myspeed = hero.child[Speed].field[tSpeed].value
+
+
+
+hero.child[xClimb].field[abValue].value = myspeed</eval>
+    <eval phase="First" priority="10000">hero.childfound[aSTR].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRCommando" name="Commando" description="You’ve practiced fighting while prone, gaining the following benefits:\n\n- Increase your Dexterity score by 1, to a maximum of 20.\n- You gain a crawling speed equal to your movement speed.\n- You no longer have disadvantage on ranged attack rolls against targets within 30 feet.\n- When you attempt to hide on your turn while prone, you can opt to not move on that turn. If you avoid moving, you are considered lightly obscured. You lose this benefit if you move or stand up, either voluntarily or because of some external effect. You are still automatically detected if any effect or action causes you to no longer be hidden. If you are still hidden on your next turn, you can continue to remain motionless and gain this benefit until you are detected." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aDEX].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRCstmDrd" name="Customized Droid" description="You’ve been customized beyond other droids of the same model, granting the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- Choose one droid customization of standard rarity from Appendix A. That customization is installed and doesn’t count against the maximum droid customizations you can support, but it does count towards your maximum parts as shown in the Droid Size Maximum Parts table in Chapter 7." compset="Feat" maxlimit="4">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <arrayval field="usrArray" index="2" value="Constitution"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRFormFghtDab" name="Formfighting Dabbler" description="You’ve dabbled in the basics of the known forms of lightsaber combat. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- You learn one lightsaber form, detailed later in this chapter. If you already know at least one lightsaber form, you instead learn three lightsaber forms. If you already know at least three lightsaber forms, you instead learn seven lightsaber forms. If you already know at least ten lightsaber forms, you instead learn the remaining forms." compset="Feat" maxlimit="4">
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <bootstrap thing="cfgPRLightForm"></bootstrap>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1]]></eval>
+    <eval phase="First" index="2"><![CDATA[      ~ If we're disabled, do nothing &
+
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.childfound[cfgPRLightForm].field[cfgMax1].value += 1]]></eval>
+    </thing>
+  <thing id="fPRInvestAtt" name="Investigative Attunement" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou’ve spent a significant amount of time appraising and testing enhanced items. You gain the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n- Your maximum attunement increases by 1.\n- You have advantage on ability checks made to identify items.\n- Once per long rest, you can choose one object that you must touch for 10 minutes. If it is an enhanced or modified item, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any powers are affecting the item and what they are. If the item was created by a power, you learn which power created it." compset="Feat" maxlimit="4">
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRMariner" name="Mariner" description="You’ve spent an exorbitant amount of time in water. You gain the following benefits:\n\n- Increase your Constitution score by 1, to a maximum of 20.\n- You gain a swimming speed equal to your movement speed.\n- You have advantage on a ability checks and saving throws related to swimming.\n- You can hold your breath for a number of minutes equal to 1 + twice your Constitution modifier." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <bootstrap thing="xSwim"></bootstrap>
+    <eval phase="First" priority="10000">hero.childfound[aCON].field[aClassMod].value += field[abValue].value</eval>
+    <eval phase="Final" priority="10000" index="3">var myspeed as number
+
+
+
+myspeed = hero.child[Speed].field[tSpeed].value
+
+
+
+hero.child[xSwim].field[abValue].value = myspeed</eval>
+    </thing>
+  <thing id="fPRPwrChan" name="Power Channeling" description="{i}{b}Prerequisite:{/b} 4th level; the ability to cast force or tech powers{/i}\n\nChoose one from force- or tech-casting. You’ve learned to cast powers of the chosen type with greater deliberation. Choose a number of powers you know of 1st level or higher equal to half your proficiency bonus (rounded down). When you cast one of the chosen powers, you can choose to spend an additional minute casting the power for each level of the power. If you do so, the cost of the power is reduced by half the number of points (rounded down). Casting a power in this way requires concentration (explained in chapter 10). If your concentration is broken, the power dissipates without taking effect.\n\nWhenever you gain a level in a class with casting of the chosen type, you can replace one of the chosen powers with another power of 1st level or higher you know." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRQckWit" name="Quick-Witted" description="Great ideas come to you naturally, often when your life depends on it. You always have a plan, or at least parts of it. You gain the following benefits:\n\n- Increase your Intelligence score by 1, to a maximum of 20.\n- You can use your Intelligence modifier instead of your Dexterity modifier when making initiative checks.\n- When you would make a Dexterity saving throw, you can instead make an Intelligence saving throw. You can use this feature a number of times equal to your proficiency bonus. You regain all expended uses of this feature when you complete a long rest." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      hero.child[aINT].field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRSavShort" name="Savage Shorty" description="{i}{b}Prerequisite:{/b} Strength 13; size Small{/i}\n\nDespite being short of stature, your size has no impact on your strength and virility. You gain the following benefits:\n\n- Increase your Strength score by 1, to a maximum of 20.\n- Your speed increases by 5 feet.\n- You lose the Undersized special trait." compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="abValue2" value="5"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="Final" priority="1000" index="2"><![CDATA[
+      ~ If we're disabled, do nothing
+      doneif (tagis[Helper.Disable] <> 0)
+
+      ~ We passed, so add to our base speed.
+      hero.child[Speed].field[tSpeed].value += field[abValue2].value]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aSTR].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRShardMod" name="Shard Modification" description="{i}{b}Prerequisite:{/b} Type droid{/i}\n\nYou are specially modified droid used to house a shard. Shards are sentient crystals native to the planet Orax, roughly a foot in length, that communicate with each other through pulses of light. While inhabiting a specialized droid host, shards are able to overcome the droid’s inability to wield the Force, granting the following benefits:\n\n- Increase an ability score of your choice by 1, to a maximum of 20.\n-You lose the Force Insensitive special trait.\n- You can cast the sense force force power once per day. Wisdom or Charisma (your choice) is your forcecasting ability for this power." compset="Feat" maxlimit="4">
+    <fieldval field="usrCandid1" value="component.BaseAttr"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="ArmProfGrp" tag="ArmorLight"/>
+    <eval phase="Final" priority="1000"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+      ~ If nothing chosen then get out now!
+
+      doneif (field[usrChosen1].ischosen = 0)
+
+
+      
+      ~ Increase the selected ability score by 1
+
+      field[usrChosen1].chosen.field[aStartMod].value += 1]]></eval>
+    </thing>
+  <thing id="fPRSuprApt" name="Supreme Aptitude" description="{i}{b}Prerequisite:{/b} 4th level; Strength, Dexteriy, Constitution or Intelligence 13{/i}\n\nYou have uncanny skill with a preternatural focus. You gain the following benefits:\n\n- Increase your Strength, Dexterity, Constitution, or Intelligence score by 1, to a maximum of 20.\n- Whenever you have advantage on an ability check using Strength, Dexterity, Constitution, or Intelligence you can reroll one of the dice once." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Dexterity"/>
+    <arrayval field="usrArray" index="2" value="Constitution"/>
+    <arrayval field="usrArray" index="3" value="Intelligence"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aSTR].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aDEX].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 2) then
+
+        hero.child[aCON].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aINT].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRSuprDur" name="Supreme Durability" description="{i}{b}Prerequisite:{/b} 4th level; Strength, Constitution, Wisdom, or Charisma 13{/i}\n\nYou have uncanny resilience of both body and mind. You gain the following benefits:\n\n- Increase your Strength, Constitution, Wisdom, or Charisma score by 1, to a maximum of 20.\n- Whenever you have advantage on a saving throw using Strength, Constitution, Wisdom, or Charisma you can reroll one of the dice once." compset="Feat" uniqueness="useronce">
+    <arrayval field="usrArray" index="0" value="Strength"/>
+    <arrayval field="usrArray" index="1" value="Constitution"/>
+    <arrayval field="usrArray" index="2" value="Wisdom"/>
+    <arrayval field="usrArray" index="3" value="Charisma"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <eval phase="First"><![CDATA[      ~ If we're disabled, do nothing &
+ 
+      doneif (tagis[Helper.Disable] = 1)
+
+
+
+      if (field[usrIndex].value = 0) then
+
+        hero.child[aSTR].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aCON].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 2) then
+
+        hero.child[aWIS].field[aStartMod].value += 1
+
+      elseif (field[usrIndex].value = 1) then
+
+        hero.child[aCHA].field[aStartMod].value += 1
+
+      endif]]></eval>
+    </thing>
+  <thing id="fPRTinyTerror" name="Tiny Terror" description="{i}{b}Prerequisite:{/b} Strength 13, size Tiny{/i}\n\nDespite falling below knee height of other species, your size has less impact on your strength and virility. You gain the following benefits:\n\n- Increase your Strength score by 1, to a maximum of 20.\n- Your speed increases by 5 feet.\n- You lose the Pintsized special trait, and you are no longer limited to +3 when determing your bonus to attack and damasge rolls for weapon attacks using Strength due to the Puny special trait.\n- You gain the Undersized special trait" compset="Feat">
+    <fieldval field="abValue" value="1"/>
+    <fieldval field="abValue2" value="5"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="abRange" tag="Personal"/>
+    <eval phase="Final" priority="1000" index="2"><![CDATA[
+      ~ If we're disabled, do nothing
+      doneif (tagis[Helper.Disable] <> 0)
+
+      ~ We passed, so add to our base speed.
+      hero.child[Speed].field[tSpeed].value += field[abValue2].value]]></eval>
+    <eval phase="First" priority="10000">hero.childfound[aSTR].field[aClassMod].value += field[abValue].value</eval>
+    </thing>
+  <thing id="fPRWpnFocus" name="Weapon Focused" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou adopt a particular type of weapon as your focus. Choose one of the weapon focus options. You can take this feat multiple times." compset="Feat" maxlimit="99">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRBlndAgi" name="Blinding Agility" description="{i}{b}Prerequisite:{/b} 12th level; Dexterity 20{/i}\n\nYou have the reflexes one who can see things before they happen, granting the following benefits:\n\n- You gain proficiency in Dexterity saving throws. If you are already proficient in them, you instead gain expertise in them.\n- Weapons that lack the two-handed or special properties are considered to have the finesse property for you.\n- Opportunity attacks made against you have disadvantage." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <exprreq message="12th level required."><![CDATA[#totallevelcount[] >= 12]]></exprreq>
+    <exprreq message="Dexterity 20 required."><![CDATA[#attrvalue[aDEX] >= 20]]></exprreq>
+    </thing>
+  <thing id="fPRCastSpec" name="Casting Specialist" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nChoose one from force- or tech-casting. You’ve mastered your chosen casting type, gaining the following benefits:\n\n- You gain a +1 bonus to your force or tech save DC and your force or tech attack modifier.\n- Once per turn, when you cast a power that requires an attack roll or saving throw, you can have advantage on one attack roll, or you can force one creature affected by the power to have advantage or disadvantage on the saving throw (your choice). Once you’ve used this feature on a power, you can’t affect that power again until you complete a short or long rest. Once you’ve used this feature on a creature, you can’t do so again until you complete a short or long rest.\n- Once per turn, when you cast a power that doesn’t require an ability check, attack roll, or saving throw, but requires a die roll, you can choose the maximum or minimum on the die (your choice). If the power requires rolling multiple dice, you can only affect a number of them equal to half your proficiency bonus (rounded up) in this way. Once you’ve used this feature on a power, you can’t affect that power again until you complete a short or long rest.\n\nYou can select this feat twice. Each time you do so, you must choose a different casting type." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <exprreq message="4th level required."><![CDATA[#totallevelcount[] >= 4]]></exprreq>
+    <prereq message="Must be able to cast force or tech spells.">
+      <validate><![CDATA[        ~ Test that the character has at least one spell
+
+        ~ or spell-like ability. &
+
+        var HasSpells as number
+
+        Call 5CHasSpell
+
+        @valid = HasSpells]]></validate>
+      </prereq>
+    </thing>
+  <thing id="fPRCQCast" name="Close Quarters Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou’ve practiced utilizing powers in close quarters, learning techniques that grant you the following benefits:\n\n- When making a ranged force or tech attack while you are within 5 feet of a hostile creature, you do not have disadvantage on the attack roll.\n- Your ranged force and tech attacks ignore half cover and three-quarters cover against targets within 30 feet of you.\n- You learn one at-will power that requires an attack roll. Your casting ability for this at-will power depends on the power list you chose from: Wisdom or Charisma (depending on power alignment) for force powers or Intelligence for tech powers." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRComCast" name="Combat Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou’ve practiced making your powers more difficult to avoid, learning techniques that grant you the following benefits:\n\n- When a creature rolls a 1 on the d20 roll of a saving throw against a power you cast that deals damage, they instead take the highest number possible for the damage die.\n- You learn one at-will power that requires a saving throw. Your casting ability for this at-will power depends on the power list you chose from: Wisdom or Charisma (depending on power alignment) for force powers or Intelligence for tech powers." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRWpnSupr" name="Weapon Supremacist" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou’ve mastered a particular type of weapon. Choose one of the weapon supremacist options, detailed later in this chapter. You can take this feat multiple times." compset="Feat" maxlimit="99">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRCompKeep" name="Companion Keeper" description="{i}{b}Prerequisite:{/b} 4th level{/i}\n\nYou gain the services of a companion. Choose one of the companion nature options." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <exprreq message="4th level required."><![CDATA[#totallevelcount[] >= 4]]></exprreq>
+    </thing>
+  <thing id="fPRCunInt" name="Cunning Intellect" description="{i}{b}Prerequisite:{/b} 12th level; Intelligence 20{/i}\n\nYou have the cunning of the most prolific scholars, granting the following benefits:\n\n- You gain proficiency in Intelligence saving throws. If you are already proficient in them, you instead gain expertise in them.\n- When you engage in the Training downtime activity, during resolution, you add your proficiency bonus to the check. If you would already add your proficiency bonus, you instead add twice your proficiency bonus. If you would already add twice your proficiency bonus, you instead have advantage on the check.\n- Whenever you make an ability check that uses your Intelligence, you can add half your proficiency bonus (rounded down) if it doesn’t already include your proficiency bonus. Additionally, if you roll lower than half your level (rounded down) on an Intelligence check, you can instead use your level for the d20 roll." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <exprreq message="12th level required."><![CDATA[#totallevelcount[] >= 12]]></exprreq>
+    <exprreq message="Intelligence 20 required."><![CDATA[#attrvalue[aINT] >= 20]]></exprreq>
+    </thing>
+  <thing id="fPRDualFocCast" name="Dual Focused Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou have learned to bifurcate your attention while concentrating on powers, learning techniques that grant you the following benefits:\n\n- If you attempt to cast a power that requires concentration while already concentrating on an existing power, you can maintain concentration on both powers simultaneously. You must spend your action each subsequent round on maintaining this concentration, or lose concentration for both powers.\n- At the end of each of your turns where you have two powers you are concentrating on, you must make a Constitution saving throw (DC equals 10 + the number of complete rounds you’ve been concentrating on two powers). On a failure, you lose concentration for both powers. You can drop concentration on one of your powers during your turn as a free action to avoid this saving throw.\n- Any time you would be forced to make a Constitution saving throw to maintain concentration due to taking damage, the DC equals 10 + both powers’ levels combined, or half the damage you take, whichever number is higher. On a failure, you lose concentration on both powers." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRExaltAwa" name="Exalted Awareness" description="{i}{b}Prerequisite:{/b} 12th level; Wisdom 20{/i}\n\nYou have the wisdom associated with the most renowned masters of the Force, granting the following benefits:\n\n- You gain proficiency in Wisdom saving throws. If you are already proficient in them, you instead gain expertise in them.\n- Creatures within 60 feet of you have disadvantage on Dexterity (Stealth) checks made to hide from you.\n- As an action, you can sense the presence of illusions and other effects designed to deceive the senses within 30 feet of you, provided that you aren’t blinded or deafened. You sense that an effect is trying to trick you, but you gain no insight into what is hidden or its true nature. Once you’ve used this feature, you must complete a short or long rest before you can use it again." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRMountCast" name="Mounted Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou are trained in the use of powers while mounted. While you are mounted and aren’t incapacitated, you gain the following benefits:\n\n- When you cast a power targeting yourself, you can also affect your mount with the power.\n- You have advantage on melee force or tech attack rolls against any unmounted creature that is smaller than your mount.\n- If your mount is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPROvrPres" name="Overwhelming Presence" description="{i}{b}Prerequisite:{/b} 12th level; Charisma 20{/i}\n\nYou have the presence of the most affluent of leaders, granting the following benefits:\n\n- You gain proficiency in Charisma saving throws. If you are already proficient in them, you instead gain expertise in them.\n- While you are conscious, up to five friendly creatures within 30 feet of you who can see or hear you and who can understand you can gain a bonus to one Intelligence, Wisdom, or Charisma saving throw they make equal to your Charisma modifier. Once they’ve done so, they can’t do so again until they finish a short or long rest.\n- As an action, you can attempt to distract up to five creatures you can see within 30 feet of you. Each creature must make a Wisdom saving throw (DC = 8 + your proficiency bonus + your Charisma modifier). Any creature immune to being charmed is unaffected. If you or your companions are fighting a creature, it has advantage on the saving throw. On a failed save, for the next minute, a creature has disadvantage on Wisdom (Perception) checks made to perceive any creature other than you until the effect ends or until the target can no longer see or hear you. This ends early if you are incapacitated or die." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRQuickCast" name="Quick Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou’ve practiced casting powers in quick succession, learning techniques that grant you the following benefits:\n\n- When you cast a power with a casting time of a bonus action, you may use your action to cast a power with a power level no higher than half your proficiency bonus (rounded down).\n- When you cast a power with a casting time of a bonus action, you can cast it without expending force or tech points as long as it is no higher level than your proficiency bonus. Once you’ve used this feature, you must complete a long rest before you can use it again." compset="Feat" uniqueness="useronce">
+    <fieldval field="trkMax" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Usage" tag="LongRest"/>
+    <tag group="User" tag="Tracker"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    </thing>
+  <thing id="fPRSnipeCast" name="Sniping Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou’ve practiced casting powers more accurately from long range, learning techniques that give you the following benefits:\n\n- When you cast a power that requires you to make an attack roll, the power’s range is doubled.\n- Your ranged force and tech attacks ignore one-quarter, half, and three-quarters cover.\n- You learn one at-will power that requires an attack roll. Your casting ability for this at-will power depends on the power list you chose from: Wisdom or Charisma (depending on power alignment) for force powers or Intelligence for tech powers." compset="Feat" uniqueness="useronce">
+    <fieldval field="trkMax" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Usage" tag="LongRest"/>
+    <tag group="User" tag="Tracker"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    </thing>
+  <thing id="fPRTitanPow" name="Titan&apos;s Power" description="{i}{b}Prerequisite:{/b} 12th level; Strength 20{/i}\n\nYou have the strength that legends tell of, granting the following benefits:\n\n- You gain proficiency in Strength saving throws. If you are already proficient in them, you instead gain expertise in them.\n- You ignore the two-handed property of weapons with which you are proficient.\n- When you miss with a melee weapon attack, the creature takes damage equal to your Strength modifier. This damage is of the same type as the weapon’s damage." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRUnnatRes" name="Unnatural Resilience" description="{i}{b}Prerequisite:{/b} 12th level; Constitution 20{/i}\n\nYou have the fortitude often attributed to gods, granting the following benefits:\n\n- You gain proficiency in Constitution saving throws. If you are already proficient in them, you instead gain expertise in them.\n- Enhanced effects, such as powers or medpacs, that would restore hit points to you can’t restore an amount less than half your level + your Constitution modifier. If this amount would exceed that maximum amount of hit points that effect could restore, you instead take that effect’s maximum.\n- You can add your Constitution modifier to death saving throws you make." compset="Feat" uniqueness="useronce">
+    <tag group="Helper" tag="ShowSpec"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    </thing>
+  <thing id="fPRWarCast" name="War Caster" description="{i}{b}Prerequisite:{/b} 4th level; the ability cast force or tech powers{/i}\n\nYou’ve practiced casting powers in the midst of combat, learning techniques that grant you the following benefits:\n\n- You have advantage on Constitution saving throws that you make to maintain your concentration on a power when you take damage.\n- Once per round, when a hostile creature provokes an opportunity attack from you, you can use your reaction to cast a power at the creature, rather than making an opportunity attack. The power must have a casting time of 1 action and must target only that creature." compset="Feat" uniqueness="useronce">
+    <fieldval field="trkMax" value="1"/>
+    <tag group="abRange" tag="Personal"/>
+    <tag group="abDuration" tag="Constant"/>
+    <tag group="Usage" tag="LongRest"/>
+    <tag group="User" tag="Tracker"/>
+    <tag group="Helper" tag="ShowSpec"/>
+    </thing>
+  <hidden id="fGrappler"/>
+  </document>
