@@ -4722,14 +4722,19 @@ doneif (#levelcount[Mnk] < 11)
 
       doneif (tagis[Helper.Disable] <> 0)
       
-      field[abValue].value = #attrbonus1[aWIS]
-      field[abValue2].value = #attrbonus1[aCHA]
-    
-      if (field[abValue].value >= field[abValue2].value) then
-           field[trkMax].value = field[abValue].value
-      else
-           field[trkMax].value = field[abValue2].value
-      endif]]></eval>
+      field[abValue].value = #levelcount[Guardian]
+     if (field[abValue].value > 16) then 
+           field[abValue2].value = 6
+        elseif (field[abValue].value > 12) then
+           field[abValue2].value = 5
+        elseif (field[abValue].value > 8) then
+           field[abValue2].value = 4
+        elseif (field[abValue].value > 4) then
+           field[abValue2].value = 3
+        else 
+           field[abValue2].value = 2
+      endif
+      field[trkMax].value = field[abValue2].value]]></eval>
     </thing>
   <thing id="cSntPRFESDeflect" name="Force-Empowered Self: Deflection" description="You can roll a Kinetic Combat die and add it to your AC against one attack before the start of your next turn." compset="ClSpecial">
     <fieldval field="abDuration" value="1"/>
